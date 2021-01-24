@@ -15,8 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { RootStoreContext } from "../stores/RootStore";
 import { observer } from "mobx-react-lite";
-import spawnAsync from "@expo/spawn-async";
-import fs from "fs";
 
 export const AddProjectListModal: React.FC = observer(({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,6 +23,9 @@ export const AddProjectListModal: React.FC = observer(({}) => {
     string | undefined
   >();
 
+  React.useEffect(() => {
+    setmendixAppsPath(projectStore.projectsStore.projectsPath);
+  }, []);
   const locateMendixAppsPath = (event: any) => {
     if (event.target.files[0]) {
       const pathToThisMedixProject = event.target.files[0].path;
@@ -35,49 +36,22 @@ export const AddProjectListModal: React.FC = observer(({}) => {
     }
   };
 
-  const acceptAndAddProjects = async () => {
+  const acceptAndAddProjects = () => {
     if (mendixAppsPath) {
       // Set Project Path To Mem
       projectStore.projectsStore.setProjectPath(mendixAppsPath);
+      projectStore.projectsStore.setSortedProjects();
+      onClose();
       // List with Node All Projects
 
-      let resultPromise = spawnAsync("ls", [mendixAppsPath]);
-      try {
-        let { stdout } = await resultPromise;
-        // console.log("s", stdout);
-      } catch (e) {
-        console.error(e.stack);
-        // The error object also has the same properties as the result object
-      }
+      //   let resultPromise = spawnAsync("ls", [mendixAppsPath]);
+      //   try {
+      //     let { stdout } = await resultPromise;
+      //     // console.log("s", stdout);
+      //   } catch (e) {
+      //     console.error(e.stack);
 
-      //   const fs = require('fs');
-      console.log(
-        "  fs.readdirSync(mendixAppsPath)",
-        fs.readdirSync(mendixAppsPath)
-      );
-      //   {
-      //       filePath:'',
-      //       sharedName:''
-      //   }
-      let sortableUnq: string[] = [];
-      fs.readdirSync(mendixAppsPath).forEach((file) => {
-        const splitNameArray = file.split("-");
-        if (splitNameArray.length <= 1) {
-          // Un-Sortabile
-          console.log("Un-Sortable", splitNameArray);
-        } else {
-          // Potentially Sortable
-          sortableUnq.push(splitNameArray[0]);
-          //
-        }
-      });
-      sortableUnq = [...new Set(sortableUnq)];
-      console.log("sortableUnq", sortableUnq);
-      // Sort and Group Projects
-
-      //Close Modal
-
-      onClose;
+      // }
     }
   };
   const displayMendixPath = () => {
