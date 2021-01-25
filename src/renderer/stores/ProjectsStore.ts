@@ -9,6 +9,7 @@ const toast = createStandaloneToast();
 import { FolderNamesType, ProjectType } from "../types/projectTypes";
 
 const PROJECTS_SORTED = "projects_Sorted";
+const GULP_SORTED = "gulpPath";
 
 export class ProjectsStore {
   rootStore: RootStore;
@@ -18,6 +19,7 @@ export class ProjectsStore {
     this.store = store;
     this.rootStore = rootStore;
     this.projectsPath = this.store.get("projectsStore");
+    this.gulpPath = this.store.get(GULP_SORTED);
     this.projectsSorted = this.store.get(PROJECTS_SORTED);
   }
 
@@ -26,11 +28,24 @@ export class ProjectsStore {
   };
 
   @persist @observable projectsPath: string = "";
+  @persist @observable gulpPath: string = "";
   @observable projectLoading: boolean = false;
   @persist @observable projectsSorted: ProjectType[] = [];
 
   @action setProjectPath(stringPath: string) {
-    this.projectsPath = stringPath;
+    this.gulpPath = stringPath;
+    this.store.set(GULP_SORTED, this.gulpPath);
+    toast({
+      title: "Gulp Folder Location Added",
+      status: "success",
+      duration: 5000,
+      position: "top",
+      isClosable: true,
+    });
+  }
+
+  @action setGulpPath(stringPath: string){
+    this.gulpPath = stringPath;
     this.store.set("projectsStore", this.projectsPath);
     toast({
       title: "Projects Folder Added",

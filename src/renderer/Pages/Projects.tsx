@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { ExtraInfoModal } from "../Components/ExtraInfoModal";
 import {
   Heading,
   Stack,
@@ -20,7 +21,7 @@ import {
   Td,
   TableCaption,
 } from "@chakra-ui/react";
-import { AddProjectListModal } from "./AddProjectListModal";
+import { AddProjectListModal } from "../Components/AddProjectListModal";
 import { RootStoreContext } from "../stores/RootStore";
 import { observer } from "mobx-react-lite";
 
@@ -141,18 +142,7 @@ const Projects: React.FC = observer(() => {
                                   </Button>
                                 </Td>
                                 <Td>
-                                  <Button
-                                    colorScheme="teal"
-                                    variant="ghost"
-                                    size="xs"
-                                    onClick={() =>
-                                      projectStore.projectsStore.openStudioInProject(
-                                        fileNames.name
-                                      )
-                                    }
-                                  >
-                                    More Actions
-                                  </Button>
+                                  <ExtraInfoModal project={fileNames} />
                                 </Td>
                               </Tr>
                             ))}
