@@ -1,32 +1,23 @@
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
+import React from "react";
+import { Switch, Route } from "react-router-dom";
 
-import Projects from '../Pages/Projects'
+import Projects from "../Pages/Projects";
 
 const Main = () => {
   return (
     <div>
-      <Switch>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/users">
-          <Users />
-        </Route>
-        <Route path="/">
-          <Projects />
-        </Route>
-      </Switch>
+      <Route path="/Projects">
+        <Projects />
+      </Route>
+      <Route path="/About">
+        <About />
+      </Route>
     </div>
-  )
-}
+  );
+};
 
-export default Main
+export default Main;
 
 function About() {
-  return <h2>About</h2>
-}
-
-function Users() {
-  return <h2>Users</h2>
+  return <h2>About me</h2>;
 }

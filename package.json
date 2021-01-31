@@ -27,6 +27,12 @@
     "directories": {
       "output": "build"
     },
+    "extraResources": [
+      {
+        "from": "data",
+        "to": "data"
+      }
+    ],
     "files": [
       "dist/electron/**/*"
     ],
@@ -58,20 +64,27 @@
   "dependencies": {
     "@chakra-ui/icons": "^1.0.3",
     "@chakra-ui/react": "^1.1.5",
+    "@dash4/react-xterm": "^0.9.3",
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
     "@expo/spawn-async": "^1.5.0",
+    "@types/messenger": "^1.4.28",
+    "@types/react-icons": "^3.0.0",
     "@types/react-router-dom": "^5.1.7",
     "date-fns": "^2.16.1",
+    "electron-positioner": "^4.1.0",
     "electron-store": "^7.0.0",
     "framer-motion": "^3.2.2-rc.1",
+    "messenger": "^0.0.9",
     "mobx": "^6.0.5",
     "mobx-persist": "^0.4.1",
     "mobx-react": "^7.0.6",
     "mobx-react-lite": "^3.1.7",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-router-dom": "^5.2.0"
+    "react-icons": "^4.1.0",
+    "react-router-dom": "^5.2.0",
+    "xterm-for-react": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
