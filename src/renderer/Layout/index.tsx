@@ -4,6 +4,9 @@ import Main from "./Main";
 import Sidebar from "./Sidebar";
 import { Switch, Route } from "react-router-dom";
 
+import { getWindowsIp } from "../utils";
+
+console.log("getWindowsIp", getWindowsIp());
 const Layout = () => {
   return (
     <>

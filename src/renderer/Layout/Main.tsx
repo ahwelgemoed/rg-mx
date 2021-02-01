@@ -1,7 +1,7 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
 
-import Projects from "../Pages/Projects";
+import Projects from '../Pages/Projects'
 
 const Main = () => {
   return (
@@ -13,11 +13,11 @@ const Main = () => {
         <About />
       </Route>
     </div>
-  );
-};
+  )
+}
 
-export default Main;
+export default Main
 
 function About() {
-  return <h2>About me</h2>;
+  return <h2>About me</h2>
 }

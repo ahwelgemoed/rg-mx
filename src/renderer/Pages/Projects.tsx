@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { ExtraInfoModal } from '../Components/ExtraInfoModal'
+import React, { useState, useContext } from "react";
+import { ExtraInfoModal } from "../Components/ExtraInfoModal";
 import {
   Heading,
   Stack,
@@ -15,21 +15,21 @@ import {
   Tbody,
   Tr,
   Th,
-  Td
-} from '@chakra-ui/react'
-import { AddProjectListModal } from '../Components/AddProjectListModal'
-import { ParallelsSettings } from '../Components/ParallelsSettings'
-import { RootStoreContext } from '../stores/RootStore'
-import { observer } from 'mobx-react-lite'
+  Td,
+} from "@chakra-ui/react";
+import { AddProjectListModal } from "../Components/AddProjectListModal";
+import { ParallelsSettingsWindows } from "../Components/ParallelsSettingsWindows";
+import { RootStoreContext } from "../stores/RootStore";
+import { observer } from "mobx-react-lite";
 
-import { format } from 'date-fns'
+import { format } from "date-fns";
 
-import { FolderNamesType, ProjectType } from '../types/projectTypes'
+import { FolderNamesType, ProjectType } from "../types/projectTypes";
 
 const Projects: React.FC = observer(() => {
-  const projectStore = useContext(RootStoreContext)
-  const [openState, setopenState] = useState<number | undefined>()
-  const [projectsState, setProjectsState] = useState<ProjectType[]>([])
+  const projectStore = useContext(RootStoreContext);
+  const [openState, setopenState] = useState<number | undefined>();
+  const [projectsState, setProjectsState] = useState<ProjectType[]>([]);
   React.useEffect(() => {
     if (
       projectStore.projectsStore.projectsSorted &&
@@ -42,11 +42,11 @@ const Projects: React.FC = observer(() => {
         return (
           new Date(b.lastModified).getTime() -
           new Date(a.lastModified).getTime()
-        )
-      })
-      setProjectsState(x)
+        );
+      });
+      setProjectsState(x);
     }
-  }, [projectStore.projectsStore.projectsSorted])
+  }, [projectStore.projectsStore.projectsSorted]);
   return (
     <div>
       <Stack direction="row" spacing={6} justify="space-between">
@@ -57,13 +57,13 @@ const Projects: React.FC = observer(() => {
               <TagLabel>
                 {projectStore.projectsStore.projectsPath
                   ? projectStore.projectsStore.projectsPath
-                  : 'No Apps Folder'}
+                  : "No Apps Folder"}
               </TagLabel>
             </Tag>
           </Text>
         </Box>
         <ButtonGroup size="sm" isAttached variant="outline">
-          <ParallelsSettings />
+          <ParallelsSettingsWindows />
           <AddProjectListModal />
         </ButtonGroup>
       </Stack>
@@ -89,7 +89,7 @@ const Projects: React.FC = observer(() => {
                       <Td>{item.name}</Td>
                       <Td>{item.folderNames.length}</Td>
                       <Td>
-                        {format(new Date(item.lastModified), 'dd/MM/yyyy')}
+                        {format(new Date(item.lastModified), "dd/MM/yyyy")}
                       </Td>
                       <Td>
                         <Button
@@ -102,7 +102,7 @@ const Projects: React.FC = observer(() => {
                               : setopenState(i)
                           }
                         >
-                          {openState === i ? 'Close' : 'Open'}
+                          {openState === i ? "Close" : "Open"}
                         </Button>
                       </Td>
                     </Tr>
@@ -124,7 +124,7 @@ const Projects: React.FC = observer(() => {
                                 <Td>
                                   {format(
                                     new Date(fileNames.lastModified),
-                                    'dd/MM/yyyy'
+                                    "dd/MM/yyyy"
                                   )}
                                 </Td>
                                 <Td>
@@ -150,7 +150,7 @@ const Projects: React.FC = observer(() => {
                       </Tr>
                     )}
                   </>
-                )
+                );
               })}
             </Tbody>
           </Table>
@@ -161,7 +161,7 @@ const Projects: React.FC = observer(() => {
         </Heading>
       )}
     </div>
-  )
-})
+  );
+});
 
-export default Projects
+export default Projects;

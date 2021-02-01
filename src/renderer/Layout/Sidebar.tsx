@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link } from 'react-router-dom'
 import {
   Flex,
   Spacer,
@@ -7,23 +7,23 @@ import {
   Text,
   Button,
   Divider,
-  IconButton,
-} from "@chakra-ui/react";
-import { RepeatClockIcon, SearchIcon } from "@chakra-ui/icons";
-import { RootStoreContext } from "../stores/RootStore";
+  IconButton
+} from '@chakra-ui/react'
+import { RepeatClockIcon, SearchIcon } from '@chakra-ui/icons'
+import { RootStoreContext } from '../stores/RootStore'
 
-import { observer } from "mobx-react-lite";
+import { observer } from 'mobx-react-lite'
 
 const Sidebar = observer(() => {
-  const projectStore = React.useContext(RootStoreContext);
+  const projectStore = React.useContext(RootStoreContext)
 
-  console.log("prje", projectStore.projectsStore.projectLoading);
+  console.log('prje', projectStore.projectsStore.projectLoading)
   return (
     // <div>
     <Flex justify="space-between" direction="column" h="100%">
       <Box>
         <nav>
-          <Link style={{ textAlign: "left" }} to="/Projects">
+          <Link style={{ textAlign: 'left' }} to="/Projects">
             <Text fontSize="lg" color="cyan" pb="4">
               <IconButton
                 mr="8"
@@ -33,7 +33,7 @@ const Sidebar = observer(() => {
               Mendix Projects
             </Text>
           </Link>
-          <Link style={{ textAlign: "left" }} to="/about">
+          <Link style={{ textAlign: 'left' }} to="/about">
             <Text fontSize="lg" color="cyan" pb="4">
               <IconButton
                 mr="8"
@@ -43,7 +43,7 @@ const Sidebar = observer(() => {
               about
             </Text>
           </Link>
-          <Link style={{ textAlign: "left" }} to="/tray">
+          <Link style={{ textAlign: 'left' }} to="/tray">
             <Text fontSize="lg" color="cyan" pb="4">
               <IconButton
                 mr="8"
@@ -63,7 +63,7 @@ const Sidebar = observer(() => {
           mr="-px"
           w="100%"
           colorScheme={
-            projectStore.projectsStore.projectLoading ? "pink" : "cyan"
+            projectStore.projectsStore.projectLoading ? 'pink' : 'cyan'
           }
           isLoading={projectStore.projectsStore.projectLoading}
           onClick={() => projectStore.projectsStore.setSortedProjects()}
@@ -74,7 +74,7 @@ const Sidebar = observer(() => {
       </Box>
     </Flex>
     // </div>
-  );
-});
+  )
+})
 
-export default Sidebar;
+export default Sidebar
