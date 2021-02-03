@@ -1,6 +1,13 @@
 import { app, BrowserWindow } from "electron";
 import { InitTray } from "./trayIndex";
 const Store = require("electron-store");
+const http = require("http").createServer();
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "*",
+  },
+});
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -40,6 +47,11 @@ function createWindow() {
 
 app.on("ready", () => {
   createWindow();
+  setTimeout(() => {
+    http.listen(7891);
+    x();
+  }, 3000);
+
   // InitTray(winURL);
 });
 
@@ -71,4 +83,34 @@ autoUpdater.on('update-downloaded', () => {
 app.on('ready', () => {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
 })
- */
+*/
+
+// app.on("ready", () => {
+
+// });
+const x = () => {
+  console.log("SOCKET");
+
+  io.on("connection", (socket: any) => {
+    console.info(`Client connected [id=${socket.id}]`);
+    socket.broadcast.emit("broadcast", "hello friends!");
+
+    // initialize this client's sequence number
+    socket.on("newChatMessage", (data) => {
+      console.log("data", data);
+    });
+
+    // when socket disconnects, remove it from the list:
+    socket.on("disconnect", () => {
+      console.info(`Client gone [id=${socket.id}]`);
+    });
+  });
+};
+
+// const OPEN_MENDIX_PRO
+// const SETUP_GULP
+// const OPEN_CMD_WINDOWS
+// const OPEN_CALYPSO
+// const OPEN_STYLES_ON_MAC
+// const OPEN_ANDROID_SIMULATOR_MX8
+// const OPEN_ANDROID_SIMULATOR_MX9
