@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import socketIOClient from "socket.io-client";
+import { createStandaloneToast } from "@chakra-ui/react";
+
+const toast = createStandaloneToast();
 
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 const SOCKET_SERVER_URL = "http://127.0.0.1:7891";
 
-const useChat = () => {
+export const useSocket = () => {
   const [messages, setMessages] = useState([]);
   const socketRef = useRef();
 
   useEffect(() => {
     //   @ts-ignore
     socketRef.current = socketIOClient(SOCKET_SERVER_URL);
+    //   @ts-ignore
 
     //   @ts-ignore
     socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
@@ -28,6 +32,20 @@ const useChat = () => {
       socketRef.current.disconnect();
     };
   }, []);
+  useEffect(() => {
+    if (socketRef.current) {
+      // @ts-ignore
+      if (socketRef.current.connected) {
+        toast({
+          title: "Windows Connected",
+          status: "success",
+          duration: 7000,
+          position: "top",
+          isClosable: true,
+        });
+      }
+    }
+  }, [socketRef]);
 
   //   @ts-ignore
   const sendMessage = (messageBody) => {
@@ -41,5 +59,3 @@ const useChat = () => {
 
   return { messages, sendMessage };
 };
-
-export default useChat;

@@ -23,17 +23,12 @@ import { RootStoreContext } from "../stores/RootStore";
 import { observer } from "mobx-react-lite";
 
 import { format } from "date-fns";
-import useWebSocket from "react-use-websocket";
 
 import { FolderNamesType, ProjectType } from "../types/projectTypes";
-import io from "socket.io-client";
-import useChat from "../utils/socketHelpers";
 
 // const socketUrl = "ws://localhost:7891";
 // const socketUrl = "http://127.0.0.1:7891/";
 const Projects: React.FC = observer(() => {
-  const { messages, sendMessage } = useChat();
-  console.log("messages", sendMessage("from Client"));
   const projectStore = useContext(RootStoreContext);
   const [openState, setopenState] = useState<number | undefined>();
   const [projectsState, setProjectsState] = useState<ProjectType[]>([]);
@@ -114,12 +109,13 @@ const Projects: React.FC = observer(() => {
                       </Td>
                     </Tr>
                     {openState === i && (
-                      <Tr>
+                      <Tr bg="teal">
                         <Table size="sm" mt="10" mb="10">
                           <Thead>
                             <Tr>
                               <Th>Branches</Th>
                               <Th>Date Modified</Th>
+                              <Th></Th>
                               <Th></Th>
                               <Th></Th>
                             </Tr>
@@ -148,7 +144,34 @@ const Projects: React.FC = observer(() => {
                                   </Button>
                                 </Td>
                                 <Td>
-                                  <ExtraInfoModal project={fileNames} />
+                                  <Button
+                                    colorScheme="teal"
+                                    size="xs"
+                                    variant="outline"
+                                    onClick={() =>
+                                      projectStore.projectsStore.openInVsCode(
+                                        fileNames.name
+                                      )
+                                    }
+                                  >
+                                    Open Styles
+                                  </Button>
+                                  {/* <ExtraInfoModal project={fileNames} /> */}
+                                </Td>
+                                <Td>
+                                  <Button
+                                    colorScheme="teal"
+                                    size="xs"
+                                    variant="outline"
+                                    onClick={() =>
+                                      projectStore.projectsStore.openStudioInProject(
+                                        fileNames.name
+                                      )
+                                    }
+                                  >
+                                    CMD
+                                  </Button>
+                                  {/* <ExtraInfoModal project={fileNames} /> */}
                                 </Td>
                               </Tr>
                             ))}
