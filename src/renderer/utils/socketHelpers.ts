@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import socketIOClient from "socket.io-client";
 import { createStandaloneToast } from "@chakra-ui/react";
 
+import { socketMessage } from "../../socketMessages";
+
 const toast = createStandaloneToast();
 
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
@@ -56,6 +58,17 @@ export const useSocket = () => {
       senderId: socketRef.current.id,
     });
   };
+  const sendAllProjects = (messageBody: any) => {
+    //   @ts-ignore
+    socketRef.current.emit(socketMessage.ALL_PROJECTS, {
+      body: stringMyBody(messageBody),
+      //   @ts-ignore
+      senderId: socketRef.current.id,
+    });
+  };
 
-  return { messages, sendMessage };
+  return { messages, sendMessage, sendAllProjects };
+};
+const stringMyBody = (body: any) => {
+  return JSON.stringify(body);
 };

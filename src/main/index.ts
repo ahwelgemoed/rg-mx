@@ -1,13 +1,7 @@
 import { app, BrowserWindow } from "electron";
 import { InitTray } from "./trayIndex";
 const Store = require("electron-store");
-const http = require("http").createServer();
-const io = require("socket.io")(http, {
-  cors: {
-    origin: "*",
-  },
-});
-
+import { initiateServer, initiateSocket } from "./socketServer";
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -48,11 +42,12 @@ function createWindow() {
 app.on("ready", () => {
   createWindow();
   setTimeout(() => {
-    http.listen(7891);
-    x();
+    initiateServer;
+    initiateSocket();
   }, 3000);
-
-  // InitTray(winURL);
+  if (process.platform === "darwin") {
+    InitTray(winURL);
+  }
 });
 
 app.on("window-all-closed", () => {
@@ -88,24 +83,6 @@ app.on('ready', () => {
 // app.on("ready", () => {
 
 // });
-const x = () => {
-  console.log("SOCKET");
-
-  io.on("connection", (socket: any) => {
-    console.info(`Client connected [id=${socket.id}]`);
-    socket.broadcast.emit("broadcast", "hello friends!");
-
-    // initialize this client's sequence number
-    socket.on("newChatMessage", (data) => {
-      console.log("data", data);
-    });
-
-    // when socket disconnects, remove it from the list:
-    socket.on("disconnect", () => {
-      console.info(`Client gone [id=${socket.id}]`);
-    });
-  });
-};
 
 // const OPEN_MENDIX_PRO
 // const SETUP_GULP

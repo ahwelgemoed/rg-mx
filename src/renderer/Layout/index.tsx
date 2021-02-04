@@ -1,15 +1,16 @@
-import React from 'react'
-import { Grid, GridItem } from '@chakra-ui/react'
-import Main from './Main'
-import Sidebar from './Sidebar'
-import { Switch, Route } from 'react-router-dom'
+import React from "react";
+import { Grid, GridItem } from "@chakra-ui/react";
+import Main from "./Main";
+import Sidebar from "./Sidebar";
+import { Switch, Route } from "react-router-dom";
+import TrayPage from "../Pages/TrayPage";
 
 const Layout = () => {
   return (
     <>
       <Switch>
         <Route path="/tray">
-          <Users />
+          <TrayPage />
         </Route>
         <Route path="/">
           <Grid
@@ -28,11 +29,7 @@ const Layout = () => {
         </Route>
       </Switch>
     </>
-  )
-}
+  );
+};
 
-export default Layout
-
-function Users() {
-  return <h2>Us</h2>
-}
+export default Layout;
