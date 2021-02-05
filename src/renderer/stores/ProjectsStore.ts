@@ -11,6 +11,8 @@ const { spawn } = require("child_process");
 const toast = createStandaloneToast();
 
 const PROJECTS_SORTED = "projects_Sorted";
+const PROJECTS_PATH_MAC = "projectsStore";
+const PROJECTS_PATH_Win = "projectsStoreWin";
 const GULP_SORTED = "gulpPath";
 
 export class ProjectsStore {
@@ -20,7 +22,9 @@ export class ProjectsStore {
     makeObservable(this);
     this.store = store;
     this.rootStore = rootStore;
-    this.projectsPath = this.store.get("projectsStore");
+    this.mendixProjectsPathMac = this.store.get(PROJECTS_PATH_MAC);
+    this.mendixProjectsPathWin = this.store.get(PROJECTS_PATH_Win);
+    // this. = this.store.get("projectsStore");
     this.gulpPath = this.store.get(GULP_SORTED);
     this.projectsSorted = this.store.get(PROJECTS_SORTED);
   }
@@ -29,10 +33,11 @@ export class ProjectsStore {
     return !name.includes("_") && name.substr(name.length - 4) == ".mpr";
   };
 
-  @persist @observable projectsPath = "";
+  @persist @observable mendixProjectsPathMac = "";
+  @persist @observable mendixProjectsPathWin = "";
   @persist @observable gulpPath = "";
   @observable projectLoading = false;
-  @persist @observable projectsSorted: ProjectType[] = [];
+  @persist projectsSorted: ProjectType[] = [];
   isDarwin = platform === "darwin";
 
   @action setGulpPath(stringPath: string) {
@@ -48,8 +53,8 @@ export class ProjectsStore {
   }
 
   @action setProjectPath(stringPath: string) {
-    this.projectsPath = stringPath;
-    this.store.set("projectsStore", this.projectsPath);
+    this.mendixProjectsPathMac = stringPath;
+    this.store.set("projectsStore", this.mendixProjectsPathMac);
     toast({
       title: "Projects Folder Added",
       status: "success",
@@ -67,8 +72,8 @@ export class ProjectsStore {
     this.setLoading(true);
     setTimeout(() => {
       let sortableUnq: string[] = [""];
-      console.log("this.projectsPath", this.projectsPath);
-      if (!this.projectsPath) {
+      console.log("this.mendixProjectsPathMac", this.mendixProjectsPathMac);
+      if (!this.mendixProjectsPathMac) {
         this.setLoading(false);
         toast({
           title: "No Projects Folder Specified",
@@ -78,10 +83,10 @@ export class ProjectsStore {
           isClosable: true,
         });
       }
-      // console.log("this.projectsPath", );
-      const rawFiles = fs.readdirSync(this.projectsPath);
+      // console.log("this.mendixProjectsPathMac", );
+      const rawFiles = fs.readdirSync(this.mendixProjectsPathMac);
       rawFiles.forEach((file) => {
-        const PROJECT_PATH = `${this.projectsPath}/${file}`;
+        const PROJECT_PATH = `${this.mendixProjectsPathMac}/${file}`;
         // If Directory
         if (fs.lstatSync(PROJECT_PATH).isDirectory()) {
           const branshFiels = fs.readdirSync(PROJECT_PATH);
@@ -98,7 +103,7 @@ export class ProjectsStore {
       const sortedList: any[] = sortableUnq.reduce((a: any[], c: string) => {
         const foundNames: FolderNamesType[] = [];
         rawFiles.forEach((name) => {
-          const PROJECT_PATH = `${this.projectsPath}/${name}`;
+          const PROJECT_PATH = `${this.mendixProjectsPathMac}/${name}`;
           if (!name.startsWith(".")) {
             if (fs.lstatSync(PROJECT_PATH).isDirectory()) {
               const branshFiels = fs.readdirSync(PROJECT_PATH);
@@ -150,7 +155,7 @@ export class ProjectsStore {
   }
 
   @action openStudioInProject(projectName: string) {
-    const buildString = `${this.projectsPath}/${projectName}`;
+    const buildString = `${this.mendixProjectsPathMac}/${projectName}`;
     const branshFiels = fs.readdirSync(buildString);
     let fileToOpen;
     branshFiels.map((files) => {
@@ -185,7 +190,7 @@ export class ProjectsStore {
   }
 
   @action async openInVsCode(projectName: string) {
-    const buildString = `${this.projectsPath}/${projectName}/theme/styles`;
+    const buildString = `${this.mendixProjectsPathMac}/${projectName}/theme/styles`;
     console.log("platform", buildString);
     if (this.isDarwin) {
       try {

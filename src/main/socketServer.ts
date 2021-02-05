@@ -11,11 +11,19 @@ export const initiateSocket = () => {
 
   socketIOServer.on("connection", (socket: any) => {
     console.info(`Client connected [id=${socket.id}]`);
+
     socket.broadcast.emit("broadcast", "hello friends!");
 
     // initialize this client's sequence number
     socket.on(socketMessage.ALL_PROJECTS, (data: any) => {
-      console.log("data", data);
+      console.log("ALL_PROJECTS", data);
+      socket.broadcast.emit(socketMessage.ALL_PROJECTS, data);
+    });
+    socket.on(socketMessage.OPEN_IN_STUDIO, (data: any) => {
+      console.log("OPEN_IN_STUDIO", data);
+    });
+    socket.on(socketMessage.OPEN_IN_VSCODE, (data: any) => {
+      console.log("OPEN_IN_VSCODE", data);
     });
 
     // when socket disconnects, remove it from the list:

@@ -41,13 +41,15 @@ function createWindow() {
 
 app.on("ready", () => {
   createWindow();
+  if (process.platform === "darwin") {
+    InitTray(winURL);
+  }
+  if (process.platform !== "darwin") {
+  }
   setTimeout(() => {
     initiateServer;
     initiateSocket();
   }, 3000);
-  if (process.platform === "darwin") {
-    InitTray(winURL);
-  }
 });
 
 app.on("window-all-closed", () => {

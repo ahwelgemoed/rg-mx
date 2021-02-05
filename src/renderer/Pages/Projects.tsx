@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 
 import {
   Heading,
@@ -10,6 +10,7 @@ import {
   Text,
   Box,
 } from "@chakra-ui/react";
+import { useSocket } from "../utils/socketHelpers";
 import ListOfProjects from "../Components/ListOfProjects";
 import { AddProjectListModal } from "../Components/AddProjectListModal";
 import { ParallelsSettings } from "../Components/ParallelsSettings";
@@ -19,7 +20,19 @@ import { observer } from "mobx-react-lite";
 import { FolderNamesType, ProjectType } from "../types/projectTypes";
 
 const Projects: React.FC = observer(() => {
+  const {
+    sendProjects,
+    sendOpenStudioInProject,
+    sendOpenInVsCode,
+  } = useSocket();
   const projectStore = useContext(RootStoreContext);
+  useEffect(() => {
+    setInterval(() => {
+      sendProjects(projectStore.projectsStore.projectsSorted);
+      sendOpenStudioInProject(projectStore.projectsStore.openStudioInProject);
+      sendOpenInVsCode(projectStore.projectsStore.openInVsCode);
+    }, 5000);
+  }, []);
 
   return (
     <div>
@@ -29,8 +42,8 @@ const Projects: React.FC = observer(() => {
           <Text fontSize="xl">
             <Tag size="sm" colorScheme="cyan" borderRadius="full">
               <TagLabel>
-                {projectStore.projectsStore.projectsPath
-                  ? projectStore.projectsStore.projectsPath
+                {projectStore.projectsStore.mendixProjectsPathMac
+                  ? projectStore.projectsStore.mendixProjectsPathMac
                   : "No Apps Folder"}
               </TagLabel>
             </Tag>
@@ -41,7 +54,11 @@ const Projects: React.FC = observer(() => {
           <AddProjectListModal />
         </ButtonGroup>
       </Stack>
-      <ListOfProjects />
+      <ListOfProjects
+        projectsSorted={projectStore.projectsStore.projectsSorted}
+        openStudioInProject={projectStore.projectsStore.openStudioInProject}
+        openInVsCode={projectStore.projectsStore.openInVsCode}
+      />
     </div>
   );
 });

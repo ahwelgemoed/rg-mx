@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+// import socketIOClient from "socket.io-client";
 import socketIOClient from "socket.io-client";
 import { createStandaloneToast } from "@chakra-ui/react";
 
@@ -6,27 +7,26 @@ import { socketMessage } from "../../socketMessages";
 
 const toast = createStandaloneToast();
 
-const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 const SOCKET_SERVER_URL = "http://127.0.0.1:7891";
 
 export const useSocket = () => {
-  const [messages, setMessages] = useState([]);
-  const socketRef = useRef();
+  const [socketProjects, setSocketProjects] = useState();
+  const socketRef = useRef<SocketIOClient.Socket>(
+    socketIOClient(SOCKET_SERVER_URL)
+  );
 
   useEffect(() => {
     //   @ts-ignore
     socketRef.current = socketIOClient(SOCKET_SERVER_URL);
-    //   @ts-ignore
 
-    //   @ts-ignore
-    socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
-      const incomingMessage = {
-        ...message,
-        //   @ts-ignore
-        ownedByCurrentUser: message.senderId === socketRef.current.id,
-      };
-      //   @ts-ignore
-      setMessages((messages) => [...messages, incomingMessage]);
+    socketRef.current.on("connect", (message) => {
+      console.log(socketRef.current.id);
+    });
+    socketRef.current.on("broadcast", (message) => {
+      console.log("broadcastbroadcastbroadcastbroadcast");
+    });
+    socketRef.current.on(socketMessage.ALL_PROJECTS, (message) => {
+      setSocketProjects(message);
     });
 
     return () => {
@@ -49,25 +49,38 @@ export const useSocket = () => {
     }
   }, [socketRef]);
 
-  //   @ts-ignore
-  const sendMessage = (messageBody) => {
-    //   @ts-ignore
-    socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
-      body: messageBody,
-      //   @ts-ignore
+  const sendProjects = (messageBody: any) => {
+    console.log("messageBodymessageBodymessageBody", messageBody);
+    // const x = messageBody.map((z) => {
+    //   return stringMyBody(z);
+    // });
+    socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
+      messageBody: stringMyBody(messageBody),
+    });
+  };
+  const sendOpenStudioInProject = (messageBody: any) => {
+    socketRef.current.emit(socketMessage.OPEN_IN_STUDIO, {
+      body: stringMyBody(messageBody),
       senderId: socketRef.current.id,
     });
   };
-  const sendAllProjects = (messageBody: any) => {
-    //   @ts-ignore
-    socketRef.current.emit(socketMessage.ALL_PROJECTS, {
+  const sendOpenInVsCode = (messageBody: any) => {
+    socketRef.current.emit(socketMessage.OPEN_IN_VSCODE, {
       body: stringMyBody(messageBody),
-      //   @ts-ignore
       senderId: socketRef.current.id,
     });
   };
 
-  return { messages, sendMessage, sendAllProjects };
+  const isSocketConnected =
+    socketRef && socketRef.current && socketRef.current.connected;
+
+  return {
+    isSocketConnected,
+    sendOpenInVsCode,
+    sendProjects,
+    sendOpenStudioInProject,
+    socketProjects,
+  };
 };
 const stringMyBody = (body: any) => {
   return JSON.stringify(body);
