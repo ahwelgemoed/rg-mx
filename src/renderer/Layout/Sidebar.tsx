@@ -17,9 +17,7 @@ import { observer } from 'mobx-react-lite'
 const Sidebar = observer(() => {
   const projectStore = React.useContext(RootStoreContext)
 
-  console.log('prje', projectStore.projectsStore.projectLoading)
   return (
-    // <div>
     <Flex justify="space-between" direction="column" h="100%">
       <Box>
         <nav>
@@ -33,16 +31,7 @@ const Sidebar = observer(() => {
               Mendix Projects
             </Text>
           </Link>
-          <Link style={{ textAlign: 'left' }} to="/about">
-            <Text fontSize="lg" color="cyan" pb="4">
-              <IconButton
-                mr="8"
-                aria-label="Search database"
-                icon={<SearchIcon />}
-              />
-              about
-            </Text>
-          </Link>
+
           <Link style={{ textAlign: 'left' }} to="/tray">
             <Text fontSize="lg" color="cyan" pb="4">
               <IconButton
@@ -73,7 +62,6 @@ const Sidebar = observer(() => {
         </Button>
       </Box>
     </Flex>
-    // </div>
   )
 })
 
