@@ -7,10 +7,13 @@ import { socketMessage } from "../../socketMessages";
 
 const toast = createStandaloneToast();
 
-const SOCKET_SERVER_URL = "http://10.211.55.4:7891";
-
-export const useSocket = () => {
+type UseSocketTypes = {
+  windowsIp: string;
+};
+export const useSocket = (props: UseSocketTypes) => {
+  const SOCKET_SERVER_URL = props && `http://${props.windowsIp}:7891`;
   const [socketProjects, setSocketProjects] = useState();
+  const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false);
   const socketRef = useRef<SocketIOClient.Socket>(
     socketIOClient(SOCKET_SERVER_URL)
   );
@@ -20,7 +23,12 @@ export const useSocket = () => {
     socketRef.current = socketIOClient(SOCKET_SERVER_URL);
 
     socketRef.current.on("connect", () => {
+      // setIsSocketConnected(true);
       console.log(socketRef.current.id);
+    });
+    socketRef.current.on("disconnect", () => {
+      setIsSocketConnected(false);
+      console.log("Disconnected");
     });
     socketRef.current.on(socketMessage.ALL_PROJECTS, (message: any) => {
       setSocketProjects(message);
@@ -35,6 +43,7 @@ export const useSocket = () => {
     if (socketRef.current) {
       // @ts-ignore
       if (socketRef.current.connected) {
+        setIsSocketConnected(true);
         toast({
           title: "Windows Connected",
           status: "success",
@@ -43,8 +52,18 @@ export const useSocket = () => {
           isClosable: true,
         });
       }
+      if (socketRef.current.disconnected && isSocketConnected) {
+        setIsSocketConnected(false);
+        toast({
+          title: "Windows Disconnected",
+          status: "error",
+          duration: 7000,
+          position: "top",
+          isClosable: true,
+        });
+      }
     }
-  }, [socketRef]);
+  }, [socketRef.current]);
 
   const sendProjects = (messageBody: any) => {
     socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
@@ -63,9 +82,6 @@ export const useSocket = () => {
       senderId: socketRef.current.id,
     });
   };
-
-  const isSocketConnected =
-    socketRef && socketRef.current && socketRef.current.connected;
 
   return {
     isSocketConnected,

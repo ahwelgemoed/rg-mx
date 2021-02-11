@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from "react";
 import {
   Heading,
   Button,
@@ -14,17 +14,17 @@ import {
   Flex,
   List,
   ListItem,
-  Divider
-} from '@chakra-ui/react'
+  Divider,
+} from "@chakra-ui/react";
 
-import { observer } from 'mobx-react-lite'
-import { FolderNamesType, ProjectType } from '../types/projectTypes'
-import { format } from 'date-fns'
+import { observer } from "mobx-react-lite";
+import { FolderNamesType, ProjectType } from "../types/projectTypes";
+import { format } from "date-fns";
 
 const ListOfProjects = observer(
   ({ projectsSorted, openStudioInProject, openInVsCode }: any) => {
-    const [projectsState, setProjectsState] = useState<ProjectType[]>([])
-    const [openState, setopenState] = useState<number | undefined>()
+    const [projectsState, setProjectsState] = useState<ProjectType[]>([]);
+    const [openState, setopenState] = useState<number | undefined>();
 
     React.useEffect(() => {
       if (projectsSorted && projectsSorted.length) {
@@ -35,11 +35,11 @@ const ListOfProjects = observer(
           return (
             new Date(b.lastModified).getTime() -
             new Date(a.lastModified).getTime()
-          )
-        })
-        setProjectsState(x)
+          );
+        });
+        setProjectsState(x);
       }
-    }, [projectsSorted])
+    }, [projectsSorted]);
     return (
       <>
         <List spacing={3}>
@@ -55,7 +55,7 @@ const ListOfProjects = observer(
                   </Box>
                   <Spacer />
                   <Box mr="4" color="teal.700">
-                    {format(new Date(item.lastModified), 'dd/MM/yyyy')}
+                    {format(new Date(item.lastModified), "dd/MM/yyyy")}
                   </Box>
                   <Box>
                     <Button
@@ -67,7 +67,7 @@ const ListOfProjects = observer(
                           : setopenState(i)
                       }
                     >
-                      {openState === i ? 'Close' : 'Open'}
+                      {openState === i ? "Close" : "Open"}
                     </Button>
                   </Box>
                 </Flex>
@@ -90,7 +90,7 @@ const ListOfProjects = observer(
                           <Td>
                             {format(
                               new Date(fileNames.lastModified),
-                              'dd/MM/yyyy'
+                              "dd/MM/yyyy"
                             )}
                           </Td>
                           <Td>
@@ -113,7 +113,6 @@ const ListOfProjects = observer(
                             >
                               Open Styles
                             </Button>
-                            {/* <ExtraInfoModal project={fileNames} /> */}
                           </Td>
                           <Td>
                             <Button
@@ -126,7 +125,6 @@ const ListOfProjects = observer(
                             >
                               CMD
                             </Button>
-                            {/* <ExtraInfoModal project={fileNames} /> */}
                           </Td>
                         </Tr>
                       ))}
@@ -134,12 +132,12 @@ const ListOfProjects = observer(
                   </Table>
                 )}
               </>
-            )
+            );
           })}
         </List>
       </>
-    )
+    );
   }
-)
+);
 
-export default ListOfProjects
+export default ListOfProjects;
