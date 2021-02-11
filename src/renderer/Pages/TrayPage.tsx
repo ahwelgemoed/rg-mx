@@ -49,7 +49,7 @@ const TrayPage = observer(() => {
     openMX.on("close", (code: any) => {
       if (!code) {
         toast({
-          title: `Openasding ${projectName} - Terminal`,
+          title: `Opening ${projectName} - Terminal`,
           status: "success",
           duration: 7000,
           position: "top",
@@ -112,6 +112,7 @@ const TrayPage = observer(() => {
       }
     });
   };
+
   return (
     <Box p="4">
       <Stack direction="row" spacing={6} justify="space-between">

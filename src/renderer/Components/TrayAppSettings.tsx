@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+const { getCurrentWindow, globalShortcut } = require("electron").remote;
 import {
   Stack,
   Button,
@@ -54,6 +54,9 @@ export const TrayAppSettings: React.FC = observer(({}) => {
       mainStore.macStore.setWindowsIp(windowsIP);
       mainStore.macStore.setMacProjectsPath(mendixAppsPath);
       onClose();
+      setTimeout(() => {
+        getCurrentWindow().reload();
+      }, 1500);
     }
   };
   const displayMendixPath = () => {

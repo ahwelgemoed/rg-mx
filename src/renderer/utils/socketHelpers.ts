@@ -12,6 +12,7 @@ type UseSocketTypes = {
 };
 export const useSocket = (props: UseSocketTypes) => {
   console.log("props", props);
+  // const SOCKET_SERVER_URL = props && `http://10.211.55.4:7891`;
   const SOCKET_SERVER_URL = props && `http://${props.windowsIp}:7891`;
   const [socketProjects, setSocketProjects] = useState();
   const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false);
@@ -21,17 +22,25 @@ export const useSocket = (props: UseSocketTypes) => {
   const socketRef = useRef<SocketIOClient.Socket>(
     socketIOClient(SOCKET_SERVER_URL)
   );
-
+  const tryReconnect = () => {
+    setTimeout(() => {
+      socketRef.current.io.open((err) => {
+        if (err) {
+          tryReconnect();
+        }
+      });
+    }, 2000);
+  };
   useEffect(() => {
     //   @ts-ignore
     socketRef.current = socketIOClient(SOCKET_SERVER_URL);
 
-    socketRef.current.on("connect", () => {
-      // setIsSocketConnected(true);
-      console.log(socketRef.current.id);
-    });
+    socketRef.current.on("connect", () => {});
+    socketRef.current.on("close", (Arno: any) => console.log("Arno", Arno));
+
     socketRef.current.on("disconnect", () => {
       setIsSocketConnected(false);
+      tryReconnect();
       console.log("Disconnected");
     });
     socketRef.current.on(socketMessage.ALL_PROJECTS, (message: any) => {
@@ -58,11 +67,11 @@ export const useSocket = (props: UseSocketTypes) => {
     };
   }, []);
   useEffect(() => {
+    console.log("0", socketRef.current);
     if (socketRef.current) {
-      console.log("1", socketRef.current);
+      console.log("1", socketRef.current.connected);
       // @ts-ignore
       if (socketRef.current.connected) {
-        console.log("2", socketRef.current);
         setIsSocketConnected(true);
         toast({
           title: "Windows Connected",
@@ -83,7 +92,7 @@ export const useSocket = (props: UseSocketTypes) => {
         });
       }
     }
-  }, [socketRef.current]);
+  }, [socketRef.current.connected, socketRef.current.disconnected]);
 
   const sendProjects = (messageBody: any) => {
     socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
@@ -124,7 +133,7 @@ export const useSocket = (props: UseSocketTypes) => {
       senderId: socketRef.current.id,
     });
   };
-
+  console.log("socketRef.current", socketRef.current);
   return {
     isSocketConnected,
     sendOpenInVsCode,

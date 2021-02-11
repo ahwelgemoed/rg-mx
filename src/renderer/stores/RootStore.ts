@@ -14,6 +14,7 @@ const hydrate = create({
 export class RootStore {
   store: any = new ElectronStorage();
   constructor() {
+    this.store.clear();
     hydrate("projectsStore", this.projectsStore);
     hydrate("macStore", this.macStore);
   }
