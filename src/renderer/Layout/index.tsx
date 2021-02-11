@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, GridItem } from "@chakra-ui/react";
 import Main from "./Main";
 import Sidebar from "./Sidebar";
@@ -8,13 +8,21 @@ import { useHistory } from "react-router-dom";
 const platform = require("os").platform();
 
 const Layout = () => {
+  const [loading, setLoading] = useState(true);
   const history = useHistory();
 
   useEffect(() => {
     if (platform === "darwin") {
       history.push("/tray");
+      setLoading(false);
+    } else {
+      history.push("/Projects");
+      setLoading(false);
     }
   }, []);
+  if (loading) {
+    return <>Loading</>;
+  }
   return (
     <>
       <Switch>

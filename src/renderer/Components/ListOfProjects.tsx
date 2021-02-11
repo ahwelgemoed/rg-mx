@@ -88,7 +88,7 @@ const ListOfProjects = observer(
                         <Th>Date Modified</Th>
                         <Th>MX Studio</Th>
                         <Th>VSCode</Th>
-                        <Th>CMD</Th>
+                        <Th>Terminal/CMD</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
@@ -141,20 +141,20 @@ const ListOfProjects = observer(
                                 size="xs"
                                 variant="outline"
                                 onClick={() =>
-                                  openInWindowsTerminal(fileNames.name)
+                                  openInMacTerminal(fileNames.name)
                                 }
                               >
-                                CMD
+                                Terminal
                               </Button>
                               <Button
                                 colorScheme="teal"
                                 size="xs"
                                 variant="outline"
                                 onClick={() =>
-                                  openInMacTerminal(fileNames.name)
+                                  openInWindowsTerminal(fileNames.name)
                                 }
                               >
-                                Terminal
+                                CMD
                               </Button>
                             </ButtonGroup>
                           </Td>

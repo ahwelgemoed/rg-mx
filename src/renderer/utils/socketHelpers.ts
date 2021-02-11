@@ -52,7 +52,6 @@ export const useSocket = (props: UseSocketTypes) => {
         projectStore.projectsStore.mendixProjectsPathMac
       );
     });
-
     return () => {
       //   @ts-ignore
       socketRef.current.disconnect();
@@ -60,8 +59,10 @@ export const useSocket = (props: UseSocketTypes) => {
   }, []);
   useEffect(() => {
     if (socketRef.current) {
+      console.log("1", socketRef.current);
       // @ts-ignore
       if (socketRef.current.connected) {
+        console.log("2", socketRef.current);
         setIsSocketConnected(true);
         toast({
           title: "Windows Connected",
@@ -82,7 +83,7 @@ export const useSocket = (props: UseSocketTypes) => {
         });
       }
     }
-  }, [socketRef]);
+  }, [socketRef.current]);
 
   const sendProjects = (messageBody: any) => {
     socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
