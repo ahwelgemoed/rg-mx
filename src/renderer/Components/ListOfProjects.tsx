@@ -6,6 +6,7 @@ import {
   Table,
   Thead,
   Tbody,
+  ButtonGroup,
   Tr,
   Th,
   Badge,
@@ -22,7 +23,14 @@ import { FolderNamesType, ProjectType } from "../types/projectTypes";
 import { format } from "date-fns";
 
 const ListOfProjects = observer(
-  ({ projectsSorted, openStudioInProject, openInVsCode }: any) => {
+  ({
+    projectsSorted,
+    openStudioInProject,
+    openInVsCodeBase,
+    openInVsCodeStyles,
+    openInMacTerminal,
+    openInWindowsTerminal,
+  }: any) => {
     const [projectsState, setProjectsState] = useState<ProjectType[]>([]);
     const [openState, setopenState] = useState<number | undefined>();
 
@@ -78,9 +86,9 @@ const ListOfProjects = observer(
                       <Tr>
                         <Th>Branches</Th>
                         <Th>Date Modified</Th>
-                        <Th></Th>
-                        <Th></Th>
-                        <Th></Th>
+                        <Th>MX Studio</Th>
+                        <Th>VSCode</Th>
+                        <Th>CMD</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
@@ -105,26 +113,50 @@ const ListOfProjects = observer(
                             </Button>
                           </Td>
                           <Td>
-                            <Button
-                              colorScheme="teal"
-                              size="xs"
-                              variant="outline"
-                              onClick={() => openInVsCode(fileNames.name)}
-                            >
-                              Open Styles
-                            </Button>
+                            <ButtonGroup size="sm" isAttached variant="outline">
+                              <Button
+                                colorScheme="teal"
+                                size="xs"
+                                variant="outline"
+                                onClick={() => openInVsCodeBase(fileNames.name)}
+                              >
+                                Base
+                              </Button>
+                              <Button
+                                colorScheme="teal"
+                                size="xs"
+                                variant="outline"
+                                onClick={() =>
+                                  openInVsCodeStyles(fileNames.name)
+                                }
+                              >
+                                Styles
+                              </Button>
+                            </ButtonGroup>
                           </Td>
                           <Td>
-                            <Button
-                              colorScheme="teal"
-                              size="xs"
-                              variant="outline"
-                              onClick={() =>
-                                openStudioInProject(fileNames.name)
-                              }
-                            >
-                              CMD
-                            </Button>
+                            <ButtonGroup size="sm" isAttached variant="outline">
+                              <Button
+                                colorScheme="teal"
+                                size="xs"
+                                variant="outline"
+                                onClick={() =>
+                                  openInWindowsTerminal(fileNames.name)
+                                }
+                              >
+                                CMD
+                              </Button>
+                              <Button
+                                colorScheme="teal"
+                                size="xs"
+                                variant="outline"
+                                onClick={() =>
+                                  openInMacTerminal(fileNames.name)
+                                }
+                              >
+                                Terminal
+                              </Button>
+                            </ButtonGroup>
                           </Td>
                         </Tr>
                       ))}

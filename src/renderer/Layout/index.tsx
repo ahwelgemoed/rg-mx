@@ -1,11 +1,20 @@
-import React from 'react'
-import { Grid, GridItem } from '@chakra-ui/react'
-import Main from './Main'
-import Sidebar from './Sidebar'
-import { Switch, Route } from 'react-router-dom'
-import TrayPage from '../Pages/TrayPage'
+import React, { useEffect } from "react";
+import { Grid, GridItem } from "@chakra-ui/react";
+import Main from "./Main";
+import Sidebar from "./Sidebar";
+import { Switch, Route } from "react-router-dom";
+import TrayPage from "../Pages/TrayPage";
+import { useHistory } from "react-router-dom";
+const platform = require("os").platform();
 
 const Layout = () => {
+  const history = useHistory();
+
+  useEffect(() => {
+    if (platform === "darwin") {
+      history.push("/tray");
+    }
+  }, []);
   return (
     <>
       <Switch>
@@ -29,7 +38,7 @@ const Layout = () => {
         </Route>
       </Switch>
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

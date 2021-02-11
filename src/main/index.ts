@@ -41,8 +41,8 @@ function createWindow() {
 
 app.on("ready", () => {
   if (process.platform === "darwin") {
-    createWindow();
-    // InitTray(winURL)
+    // createWindow();
+    InitTray(winURL);
   }
   if (process.platform !== "darwin") {
     createWindow();
