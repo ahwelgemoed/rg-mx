@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from "react";
 import {
   Heading,
   Button,
@@ -6,6 +6,7 @@ import {
   Table,
   Thead,
   Tbody,
+  ButtonGroup,
   Tr,
   Th,
   Badge,
@@ -14,17 +15,24 @@ import {
   Flex,
   List,
   ListItem,
-  Divider
-} from '@chakra-ui/react'
+  Divider,
+} from "@chakra-ui/react";
 
-import { observer } from 'mobx-react-lite'
-import { FolderNamesType, ProjectType } from '../types/projectTypes'
-import { format } from 'date-fns'
+import { observer } from "mobx-react-lite";
+import { FolderNamesType, ProjectType } from "../types/projectTypes";
+import { format } from "date-fns";
 
 const ListOfProjects = observer(
-  ({ projectsSorted, openStudioInProject, openInVsCode }: any) => {
-    const [projectsState, setProjectsState] = useState<ProjectType[]>([])
-    const [openState, setopenState] = useState<number | undefined>()
+  ({
+    projectsSorted,
+    openStudioInProject,
+    openInVsCodeBase,
+    openInVsCodeStyles,
+    openInMacTerminal,
+    openInWindowsTerminal,
+  }: any) => {
+    const [projectsState, setProjectsState] = useState<ProjectType[]>([]);
+    const [openState, setopenState] = useState<number | undefined>();
 
     React.useEffect(() => {
       if (projectsSorted && projectsSorted.length) {
@@ -35,11 +43,11 @@ const ListOfProjects = observer(
           return (
             new Date(b.lastModified).getTime() -
             new Date(a.lastModified).getTime()
-          )
-        })
-        setProjectsState(x)
+          );
+        });
+        setProjectsState(x);
       }
-    }, [projectsSorted])
+    }, [projectsSorted]);
     return (
       <>
         <List spacing={3}>
@@ -55,7 +63,7 @@ const ListOfProjects = observer(
                   </Box>
                   <Spacer />
                   <Box mr="4" color="teal.700">
-                    {format(new Date(item.lastModified), 'dd/MM/yyyy')}
+                    {format(new Date(item.lastModified), "dd/MM/yyyy")}
                   </Box>
                   <Box>
                     <Button
@@ -67,7 +75,7 @@ const ListOfProjects = observer(
                           : setopenState(i)
                       }
                     >
-                      {openState === i ? 'Close' : 'Open'}
+                      {openState === i ? "Close" : "Open"}
                     </Button>
                   </Box>
                 </Flex>
@@ -78,9 +86,9 @@ const ListOfProjects = observer(
                       <Tr>
                         <Th>Branches</Th>
                         <Th>Date Modified</Th>
-                        <Th></Th>
-                        <Th></Th>
-                        <Th></Th>
+                        <Th>MX Studio</Th>
+                        <Th>VSCode</Th>
+                        <Th>Terminal/CMD</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
@@ -90,7 +98,7 @@ const ListOfProjects = observer(
                           <Td>
                             {format(
                               new Date(fileNames.lastModified),
-                              'dd/MM/yyyy'
+                              "dd/MM/yyyy"
                             )}
                           </Td>
                           <Td>
@@ -105,28 +113,50 @@ const ListOfProjects = observer(
                             </Button>
                           </Td>
                           <Td>
-                            <Button
-                              colorScheme="teal"
-                              size="xs"
-                              variant="outline"
-                              onClick={() => openInVsCode(fileNames.name)}
-                            >
-                              Open Styles
-                            </Button>
-                            {/* <ExtraInfoModal project={fileNames} /> */}
+                            <ButtonGroup size="sm" isAttached variant="outline">
+                              <Button
+                                colorScheme="teal"
+                                size="xs"
+                                variant="outline"
+                                onClick={() => openInVsCodeBase(fileNames.name)}
+                              >
+                                Base
+                              </Button>
+                              <Button
+                                colorScheme="teal"
+                                size="xs"
+                                variant="outline"
+                                onClick={() =>
+                                  openInVsCodeStyles(fileNames.name)
+                                }
+                              >
+                                Styles
+                              </Button>
+                            </ButtonGroup>
                           </Td>
                           <Td>
-                            <Button
-                              colorScheme="teal"
-                              size="xs"
-                              variant="outline"
-                              onClick={() =>
-                                openStudioInProject(fileNames.name)
-                              }
-                            >
-                              CMD
-                            </Button>
-                            {/* <ExtraInfoModal project={fileNames} /> */}
+                            <ButtonGroup size="sm" isAttached variant="outline">
+                              <Button
+                                colorScheme="teal"
+                                size="xs"
+                                variant="outline"
+                                onClick={() =>
+                                  openInMacTerminal(fileNames.name)
+                                }
+                              >
+                                Terminal
+                              </Button>
+                              <Button
+                                colorScheme="teal"
+                                size="xs"
+                                variant="outline"
+                                onClick={() =>
+                                  openInWindowsTerminal(fileNames.name)
+                                }
+                              >
+                                CMD
+                              </Button>
+                            </ButtonGroup>
                           </Td>
                         </Tr>
                       ))}
@@ -134,12 +164,12 @@ const ListOfProjects = observer(
                   </Table>
                 )}
               </>
-            )
+            );
           })}
         </List>
       </>
-    )
+    );
   }
-)
+);
 
-export default ListOfProjects
+export default ListOfProjects;
