@@ -86,6 +86,7 @@ export const useSocket = (props: UseSocketTypes) => {
   }, [socketRef.current]);
 
   const sendProjects = (messageBody: any) => {
+    console.log("ME!", messageBody);
     socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
       messageBody: stringMyBody(messageBody),
     });
