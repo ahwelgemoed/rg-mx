@@ -18,7 +18,8 @@ import {
 import { SettingsIcon } from '@chakra-ui/icons'
 import { RootStoreContext } from '../stores/RootStore'
 import { observer } from 'mobx-react-lite'
-
+const platform = require('os').platform()
+const slash = platform === 'darwin' ? '/' : '\\'
 export const AddProjectListModal: React.FC = observer(({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const projectStore = React.useContext(RootStoreContext)
@@ -38,9 +39,9 @@ export const AddProjectListModal: React.FC = observer(({}) => {
   const locateMendixAppsPath = (event: any) => {
     if (event.target.files[0]) {
       const pathToThisMendixProject = event.target.files[0].path
-      const split = pathToThisMendixProject.split('/')
+      const split = pathToThisMendixProject.split(slash)
       split.splice(split.length - 2, 2)
-      const joinMendixPath = split.join('/')
+      const joinMendixPath = split.join(slash)
       setMendixAppsPath(joinMendixPath)
     }
   }

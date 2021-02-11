@@ -21,9 +21,11 @@ export const initiateSocket = () => {
     })
     socket.on(socketMessage.OPEN_IN_STUDIO, (data: any) => {
       console.log('OPEN_IN_STUDIO', data)
+      socket.broadcast.emit(socketMessage.OPEN_IN_STUDIO, data)
     })
-    socket.on(socketMessage.OPEN_IN_VSCODE, (data: any) => {
+    socket.on(socketMessage.OPEN_IN_WINDOWS_CMD, (data: any) => {
       console.log('OPEN_IN_VSCODE', data)
+      socket.broadcast.emit(socketMessage.OPEN_IN_WINDOWS_CMD, data)
     })
 
     // when socket disconnects, remove it from the list:
