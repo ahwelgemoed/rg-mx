@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 // import socketIOClient from "socket.io-client";
 import socketIOClient from "socket.io-client";
 import { createStandaloneToast } from "@chakra-ui/react";
-
+import { RootStoreContext } from "../stores/RootStore";
 import { socketMessage } from "../../socketMessages";
 
 const toast = createStandaloneToast();
@@ -15,6 +15,9 @@ export const useSocket = (props: UseSocketTypes) => {
   const SOCKET_SERVER_URL = props && `http://${props.windowsIp}:7891`;
   const [socketProjects, setSocketProjects] = useState();
   const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false);
+
+  const projectStore = useContext(RootStoreContext);
+  const [openProjectInStudio, setopenProjectInStudio] = useState<string>("");
   const socketRef = useRef<SocketIOClient.Socket>(
     socketIOClient(SOCKET_SERVER_URL)
   );
@@ -33,6 +36,21 @@ export const useSocket = (props: UseSocketTypes) => {
     });
     socketRef.current.on(socketMessage.ALL_PROJECTS, (message: any) => {
       setSocketProjects(message);
+    });
+    socketRef.current.on(socketMessage.OPEN_IN_STUDIO, (message: any) => {
+      console.log("OPEN_IN_VSCODE", message);
+      setopenProjectInStudio(message);
+      setTimeout(() => {
+        setopenProjectInStudio("");
+      }, 2000);
+    });
+    socketRef.current.on(socketMessage.OPEN_IN_WINDOWS_CMD, (message: any) => {
+      const prjToOpen = JSON.parse(message.body);
+      console.log("prjToOpen", prjToOpen);
+      projectStore.projectsStore.openProjectInCMD(
+        prjToOpen,
+        projectStore.projectsStore.mendixProjectsPathMac
+      );
     });
 
     return () => {
@@ -64,7 +82,7 @@ export const useSocket = (props: UseSocketTypes) => {
         });
       }
     }
-  }, [socketRef.current]);
+  }, [socketRef]);
 
   const sendProjects = (messageBody: any) => {
     socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
@@ -113,6 +131,7 @@ export const useSocket = (props: UseSocketTypes) => {
     sendProjects,
     sendOpenStudioInProject,
     socketProjects,
+    openProjectInStudio,
   };
 };
 const stringMyBody = (body: any) => {

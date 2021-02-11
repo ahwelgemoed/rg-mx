@@ -23,18 +23,30 @@ const Projects: React.FC = observer(() => {
   const {
     sendProjects,
     sendOpenStudioInProject,
-    sendOpenInVsCode
+    openProjectInStudio
   } = useSocket()
   const projectStore = useContext(RootStoreContext)
   useEffect(() => {
     const interval = setInterval(() => {
       sendProjects(projectStore.projectsStore.projectsSorted)
       sendOpenStudioInProject(projectStore.projectsStore.openStudioInProject)
-      sendOpenInVsCode(projectStore.projectsStore.openInVsCode)
+      // sendOpenInVsCode(projectStore.projectsStore.openInVsCode)
     }, 5000)
     return () => clearInterval(interval)
   }, [])
+  useEffect(() => {
+    console.log('openProjectInStudio', )
+    if(openProjectInStudio){
+      // @ts-ignore
+      opneThisProjectInStudio(JSON.parse(openProjectInStudio.body))
+    }
+  }, [openProjectInStudio])
 
+  const opneThisProjectInStudio = (path: string) => {
+    // console.log('opneThisProjectInStudio', e)
+    // console.log('{projectStore.projectsStore.mendixProjectsPathMac', projectStore.projectsStore.mendixProjectsPathMac)
+    projectStore.projectsStore.openStudioInProject(path, projectStore.projectsStore.mendixProjectsPathMac)
+  }
   return (
     <div>
       <Stack direction="row" spacing={6} justify="space-between">
@@ -57,7 +69,7 @@ const Projects: React.FC = observer(() => {
       </Stack>
       <ListOfProjects
         projectsSorted={projectStore.projectsStore.projectsSorted}
-        openStudioInProject={projectStore.projectsStore.openStudioInProject}
+        openStudioInProject={opneThisProjectInStudio}
         openInVsCode={projectStore.projectsStore.openInVsCode}
       />
     </div>

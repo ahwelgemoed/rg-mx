@@ -1,6 +1,7 @@
 const platform = require("os").platform();
 const path = require("path");
 const name = require("../../../package.json").name;
+const { networkInterfaces } = require("os");
 
 export const home = process.env.HOME;
 
@@ -30,5 +31,18 @@ export function getAppDataPath() {
       console.log("Unsupported platform!");
       process.exit(1);
     }
+  }
+}
+
+export function getWindowsIp() {
+  if (process.platform == "win32") {
+    const nets = networkInterfaces();
+    const { Ethernet } = nets;
+    if (!Ethernet) return;
+    return Ethernet.find((ips: any) => {
+      if (ips.family === "IPv4") {
+        return ips.address;
+      }
+    });
   }
 }

@@ -14,16 +14,21 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Icon
+  useClipboard,
+  Icon,
+  Flex,
+  Input
 } from '@chakra-ui/react'
 // import messenger from "messenger";
 import spawnAsync from '@expo/spawn-async'
-
+import { getWindowsIp } from '../utils'
 import { MdComputer } from 'react-icons/md'
 import { RootStoreContext } from '../stores/RootStore'
 import { observer } from 'mobx-react-lite'
 
 export const ParallelsSettings: React.FC = observer(({}) => {
+  const iPWindows = getWindowsIp().address
+  const { hasCopied, onCopy } = useClipboard(iPWindows)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const projectStore = React.useContext(RootStoreContext)
   const [allVms, setAllVms] = React.useState<string | undefined>()
@@ -72,10 +77,19 @@ export const ParallelsSettings: React.FC = observer(({}) => {
           <ModalBody>
             <Stack pt={3} spacing={4} align="stretch">
               <Heading size="md" mb={4}>
-                Current Parrles Setup
+                Setup
               </Heading>
-
               <Divider />
+              <Heading size="md" mb={4}>
+                Copy This into The Tray App
+              </Heading>
+              <Flex mb={2}>
+                <Input size="sm" value={iPWindows} isReadOnly placeholder="Welcome" />
+                <Button onClick={onCopy}>
+                  {hasCopied ? 'Copied' : 'Copy'}
+                </Button>
+              </Flex>
+
             </Stack>
           </ModalBody>
 
