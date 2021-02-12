@@ -1,59 +1,64 @@
-import React, { useEffect, useContext } from 'react'
-
+import React, { useEffect, useContext, useState } from "react";
 import {
   Heading,
   Stack,
   ButtonGroup,
   Tag,
   TagLabel,
+  Skeleton,
   Divider,
   Text,
-  Box
-} from '@chakra-ui/react'
-import { getWindowsIp } from '../utils'
-import { useSocket } from '../utils/socketHelpers'
-import ListOfProjects from '../Components/ListOfProjects'
-import { AddProjectListModal } from '../Components/AddProjectListModal'
-import { ParallelsSettings } from '../Components/ParallelsSettings'
-import { RootStoreContext } from '../stores/RootStore'
-import { observer } from 'mobx-react-lite'
+  Box,
+} from "@chakra-ui/react";
+import { getWindowsIp } from "../utils";
+import { useSocket } from "../utils/socketHelpers";
+import ListOfProjects from "../Components/ListOfProjects";
+import { AddProjectListModal } from "../Components/AddProjectListModal";
+import { ParallelsSettings } from "../Components/ParallelsSettings";
+import { RootStoreContext } from "../stores/RootStore";
+import { observer } from "mobx-react-lite";
 
-import { FolderNamesType, ProjectType } from '../types/projectTypes'
+import { FolderNamesType, ProjectType } from "../types/projectTypes";
 
 const Projects: React.FC = observer(() => {
-  const iPWindows = getWindowsIp().address
+  const iPWindows = getWindowsIp().address;
   const {
     sendProjects,
     sendOpenStudioInProject,
-    openProjectInStudio
+    openProjectInStudio,
   } = useSocket({
-    windowsIp: iPWindows
-  })
-  const projectStore = useContext(RootStoreContext)
+    windowsIp: iPWindows,
+  });
+  const [loading, setLoading] = useState(true);
+  const projectStore = useContext(RootStoreContext);
   useEffect(() => {
     const interval = setInterval(() => {
-      sendProjects(projectStore.projectsStore.projectsSorted)
-      sendOpenStudioInProject(projectStore.projectsStore.openStudioInProject)
-      // sendOpenInVsCode(projectStore.projectsStore.openInVsCode)
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
+      if (projectStore.projectsStore.projectsSorted) {
+        sendProjects(projectStore.projectsStore.projectsSorted);
+        loading && setLoading(false);
+      }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
   useEffect(() => {
-    console.log('openProjectInStudio')
     if (openProjectInStudio) {
       // @ts-ignore
-      opneThisProjectInStudio(JSON.parse(openProjectInStudio.body))
+      opneThisProjectInStudio(JSON.parse(openProjectInStudio.body));
     }
-  }, [openProjectInStudio])
+  }, [openProjectInStudio]);
 
   const opneThisProjectInStudio = (path: string) => {
-    // console.log('opneThisProjectInStudio', e)
-    // console.log('{projectStore.projectsStore.mendixProjectsPathMac', projectStore.projectsStore.mendixProjectsPathMac)
     projectStore.projectsStore.openStudioInProject(
       path,
       projectStore.projectsStore.mendixProjectsPathMac
-    )
-  }
+    );
+  };
+  useEffect(() => {
+    console.log(
+      "projectStore.projectsStore.projectsSorted",
+      projectStore.projectsStore.projectsSorted
+    );
+  }, [projectStore.projectsStore.projectsSorted]);
   return (
     <div>
       <Stack direction="row" spacing={6} justify="space-between">
@@ -64,7 +69,7 @@ const Projects: React.FC = observer(() => {
               <TagLabel>
                 {projectStore.projectsStore.mendixProjectsPathMac
                   ? projectStore.projectsStore.mendixProjectsPathMac
-                  : 'No Apps Folder'}
+                  : "No Apps Folder"}
               </TagLabel>
             </Tag>
           </Text>
@@ -74,13 +79,21 @@ const Projects: React.FC = observer(() => {
           <AddProjectListModal />
         </ButtonGroup>
       </Stack>
-      <ListOfProjects
-        projectsSorted={projectStore.projectsStore.projectsSorted}
-        openStudioInProject={opneThisProjectInStudio}
-        openInVsCode={projectStore.projectsStore.openInVsCode}
-      />
+      {loading ? (
+        <>
+          <Skeleton height="20px" mb="4" />
+          <Skeleton height="20px" mb="4" />
+          <Skeleton height="20px" mb="4" />
+        </>
+      ) : (
+        <ListOfProjects
+          projectsSorted={projectStore.projectsStore.projectsSorted}
+          openStudioInProject={opneThisProjectInStudio}
+          openInVsCode={projectStore.projectsStore.openInVsCode}
+        />
+      )}
     </div>
-  )
-})
+  );
+});
 
-export default Projects
+export default Projects;
