@@ -1,26 +1,26 @@
-import { createContext } from "react";
-import { MacStore } from "./MacStore";
-import { ProjectsStore } from "./ProjectsStore";
-import { create, persist } from "mobx-persist";
+import { createContext } from 'react'
+import { MacStore } from './MacStore'
+import { ProjectsStore } from './ProjectsStore'
+import { create, persist } from 'mobx-persist'
 
-import { remote } from "electron";
+import { remote } from 'electron'
 
-const ElectronStorage = remote.require("electron-store");
+const ElectronStorage = remote.require('electron-store')
 
 const hydrate = create({
   storage: localStorage,
-  jsonify: false,
-});
+  jsonify: false
+})
 export class RootStore {
   store: any = new ElectronStorage();
   constructor() {
-    this.store.clear();
-    hydrate("projectsStore", this.projectsStore);
-    hydrate("macStore", this.macStore);
+    // this.store.clear();
+    hydrate('projectsStore', this.projectsStore)
+    hydrate('macStore', this.macStore)
   }
 
   projectsStore = new ProjectsStore(this, this.store);
   macStore = new MacStore(this, this.store);
 }
 
-export const RootStoreContext = createContext(new RootStore());
+export const RootStoreContext = createContext(new RootStore())

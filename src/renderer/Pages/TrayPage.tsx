@@ -2,10 +2,13 @@ import React, { useContext } from "react";
 import {
   Tabs,
   TabList,
+  IconButton,
+  Button,
   TabPanels,
   Skeleton,
   Tab,
   Stack,
+  Image,
   ButtonGroup,
   Box,
   Badge,
@@ -13,17 +16,27 @@ import {
   Heading,
   createStandaloneToast,
 } from "@chakra-ui/react";
+const fixPath = require("fix-path");
+import { CloseIcon, RepeatIcon } from "@chakra-ui/icons";
 import { useSocket } from "../utils/socketHelpers";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../stores/RootStore";
 import ListOfProjects from "../Components/ListOfProjects";
 import { TrayAppSettings } from "../Components/TrayAppSettings";
-const spawn = require("cross-spawn");
+import Simulator from "../Components/Simulator";
+import Widgets from "../Components/Widgets";
+import GistBoard from "../Components/GistBoard";
+import icon from "../assets/Icon-128.png";
+const { ipcRenderer } = require("electron");
+
+const { getCurrentWindow } = require("electron").remote;
+// const spawn = require("cross-spawn");
+const spawn = require("child_process").spawn;
 
 const toast = createStandaloneToast();
 const TrayPage = observer(() => {
+  fixPath();
   const mainStore = React.useContext(RootStoreContext);
-  console.log("mainStore.macStore.windowsIp", mainStore.macStore.windowsIp);
   const {
     isSocketConnected,
     socketProjects,
@@ -36,7 +49,6 @@ const TrayPage = observer(() => {
     const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}`;
     const openMX = spawn("open", ["-a", "Terminal", projectPath]);
     openMX.stderr.on("data", (data: any) => {
-      console.log("data", data);
       toast({
         status: "error",
         title: "Error",
@@ -60,8 +72,7 @@ const TrayPage = observer(() => {
   };
   const openProjectInVSCodeMacBase = (projectName: string) => {
     const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}`;
-    const openMX = spawn("code", [projectPath]);
-    // const ls = spawn('ls', ['-lh', '/usr']);
+    const openMX = spawn("code", [projectPath], { stdio: "inherit" });
     openMX.stderr.on("data", (data: any) => {
       console.log("data", data);
       toast({
@@ -112,25 +123,52 @@ const TrayPage = observer(() => {
       }
     });
   };
-
   return (
     <Box p="4">
       <Stack direction="row" spacing={6} justify="space-between">
-        <Heading mb={4}>
-          Mendid-X{" "}
-          <Badge colorScheme={isSocketConnected ? "teal" : "red"}>
-            {isSocketConnected ? "Connected" : "Windows Offline"}
-          </Badge>
-        </Heading>
-        <ButtonGroup size="sm" isAttached variant="outline">
+        <Stack direction="row" alignItems="center">
+          <Image boxSize="80px" src={icon} alt="Segun Adebayo" />
+          <Stack direction="column" mb="4">
+            <Heading>Mendid-X </Heading>
+            <Badge
+              colorScheme={isSocketConnected ? "teal" : "red"}
+              borderRadius="5px"
+            >
+              {isSocketConnected
+                ? "Windows Is Connected"
+                : "Windows Is Offline"}
+            </Badge>
+          </Stack>
+        </Stack>
+        <ButtonGroup size="sm" isAttached>
           <TrayAppSettings />
+          <IconButton
+            colorScheme="teal"
+            size="xs"
+            aria-label="reload"
+            onClick={() => getCurrentWindow().reload()}
+            icon={<RepeatIcon />}
+          />
+          <IconButton
+            size="xs"
+            colorScheme="red"
+            onClick={() =>
+              ipcRenderer.send(
+                "asynchronous-message",
+                "example example send to main process"
+              )
+            }
+            aria-label="close"
+            icon={<CloseIcon />}
+          />
         </ButtonGroup>
       </Stack>
-      <Tabs>
+      <Tabs variant="enclosed" colorScheme="teal">
         <TabList>
           <Tab isDisabled={!isSocketConnected}>Projects</Tab>
+          <Tab>Widgets</Tab>
           <Tab>Simulator</Tab>
-          <Tab>ClipBoard</Tab>
+          <Tab>Gists</Tab>
         </TabList>
 
         <TabPanels>
@@ -156,7 +194,13 @@ const TrayPage = observer(() => {
             )}
           </TabPanel>
           <TabPanel>
-            <p>two!</p>
+            <Widgets />
+          </TabPanel>
+          <TabPanel>
+            <Simulator />
+          </TabPanel>
+          <TabPanel>
+            <GistBoard ghUserName={mainStore.macStore.githubUsername} />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -165,3 +209,8 @@ const TrayPage = observer(() => {
 });
 
 export default TrayPage;
+
+// TypeError: Error processing argument at index 0, conversion failure from /Applications/Mendid-X.app/Contents/Resources/app.asar/dist/electron/trayIcon.png
+// at u (/Applications/Mendid-X.app/Contents/Resources/app.asar/dist/electron/main.js:8:28791)
+// at App.<anonymous> (/Applications/Mendid-X.app/Contents/Resources/app.asar/dist/electron/main.js:8:30230)
+// at App.emit (events.js:208:15)
