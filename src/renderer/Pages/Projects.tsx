@@ -143,7 +143,12 @@ const Projects: React.FC = observer(() => {
           openInVsCode={projectStore.projectsStore.openInVsCode}
           openInVsCodeBase={openProjectInVSCodeWindowsBase}
           openInVsCodeStyles={openProjectInVSCodeWindowsStyles}
-          openInWindowsTerminal={projectStore.projectsStore.openProjectInCMD}
+          openInWindowsTerminal={(x: any) =>
+            projectStore.projectsStore.openProjectInCMD(
+              x,
+              projectStore.projectsStore.mendixProjectsPathMac
+            )
+          }
         />
       )}
     </Box>

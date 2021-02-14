@@ -1,4 +1,4 @@
 @echo off 
-cd "undefined\Mendix-Mindsphere-MVP-main"
+cd "C:\MendixApps\Mendix-Mindsphere-MVP-main"
 start ""
 dir
