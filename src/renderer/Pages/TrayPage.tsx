@@ -16,8 +16,7 @@ import {
   Heading,
   createStandaloneToast,
 } from "@chakra-ui/react";
-const fixPath = require("fix-path");
-import { CloseIcon, RepeatIcon } from "@chakra-ui/icons";
+import { CloseIcon, RepeatIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useSocket } from "../utils/socketHelpers";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../stores/RootStore";
@@ -27,15 +26,17 @@ import Simulator from "../Components/Simulator";
 import Widgets from "../Components/Widgets";
 import GistBoard from "../Components/GistBoard";
 import icon from "../assets/Icon-128.png";
+import { useHistory } from "react-router-dom";
+const fixPath = require("fix-path");
 const { ipcRenderer } = require("electron");
-
+const platform = require("os").platform();
 const { getCurrentWindow } = require("electron").remote;
-// const spawn = require("cross-spawn");
 const spawn = require("child_process").spawn;
 
 const toast = createStandaloneToast();
 const TrayPage = observer(() => {
-  fixPath();
+  platform === "darwin" && fixPath(); // Super important for MAC Path Fixes
+  const history = useHistory();
   const mainStore = React.useContext(RootStoreContext);
   const {
     isSocketConnected,
@@ -74,7 +75,6 @@ const TrayPage = observer(() => {
     const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}`;
     const openMX = spawn("code", [projectPath], { stdio: "inherit" });
     openMX.stderr.on("data", (data: any) => {
-      console.log("data", data);
       toast({
         status: "error",
         title: "Error",
@@ -123,13 +123,14 @@ const TrayPage = observer(() => {
       }
     });
   };
+
   return (
     <Box p="4">
       <Stack direction="row" spacing={6} justify="space-between">
         <Stack direction="row" alignItems="center">
           <Image boxSize="80px" src={icon} alt="Segun Adebayo" />
           <Stack direction="column" mb="4">
-            <Heading>Mendid-X </Heading>
+            <Heading>rg-mx </Heading>
             <Badge
               colorScheme={isSocketConnected ? "teal" : "red"}
               borderRadius="5px"
@@ -142,6 +143,15 @@ const TrayPage = observer(() => {
         </Stack>
         <ButtonGroup size="sm" isAttached>
           <TrayAppSettings />
+          {process.env.NODE_ENV === "development" && (
+            <IconButton
+              colorScheme="yellow"
+              size="xs"
+              aria-label="reload"
+              onClick={() => history.push("/Projects")}
+              icon={<ViewOffIcon />}
+            />
+          )}
           <IconButton
             colorScheme="teal"
             size="xs"
@@ -210,7 +220,7 @@ const TrayPage = observer(() => {
 
 export default TrayPage;
 
-// TypeError: Error processing argument at index 0, conversion failure from /Applications/Mendid-X.app/Contents/Resources/app.asar/dist/electron/trayIcon.png
-// at u (/Applications/Mendid-X.app/Contents/Resources/app.asar/dist/electron/main.js:8:28791)
-// at App.<anonymous> (/Applications/Mendid-X.app/Contents/Resources/app.asar/dist/electron/main.js:8:30230)
+// TypeError: Error processing argument at index 0, conversion failure from /Applications/rg-mx.app/Contents/Resources/app.asar/dist/electron/trayIcon.png
+// at u (/Applications/rg-mx.app/Contents/Resources/app.asar/dist/electron/main.js:8:28791)
+// at App.<anonymous> (/Applications/rg-mx.app/Contents/Resources/app.asar/dist/electron/main.js:8:30230)
 // at App.emit (events.js:208:15)

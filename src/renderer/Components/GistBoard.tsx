@@ -17,8 +17,10 @@ import {
   Flex,
   List,
   ListItem,
-  Divider
+  Divider,
+  Link
 } from '@chakra-ui/react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { format } from 'date-fns'
 const { shell } = require('electron')
 type GistBoardProps = {
@@ -35,15 +37,18 @@ const GistBoard = ({ ghUserName }: GistBoardProps) => {
         .then((data) => setListOfgists(data))
     }
   }, [ghUserName])
-  //   console.log("listOfgists", listOfgists);
   return (
     <div>
       <List spacing={3}>
         {!ghUserName ? (
-          <Heading mb={4}>No Github Username</Heading>
+          <Heading>No Github Username</Heading>
         ) : (
-          <Heading mb={4}>All Public Gists for {ghUserName}</Heading>
+          <Heading>All Public Gists for {ghUserName}</Heading>
         )}
+        <Heading as="h6" size="xs" mb={4}>
+          This is a list of all the public gist for the user you have entered
+        </Heading>
+
         {listOfgists &&
           listOfgists.map((gist, i) => {
             const files = Object.entries(gist.files)

@@ -1,5 +1,5 @@
 {
-  "name": "Mendid-X",
+  "name": "rg-mx",
   "version": "0.0.1",
   "author": "ahwelgemoed",
   "description": "An electron-react project",
@@ -22,9 +22,9 @@
     "test:e2e": "yarn run pack && jest -c jest.e2e.config.js"
   },
   "build": {
-    "productName": "Mendid-X",
+    "productName": "rg-mx",
     "extends": null,
-    "appId": "com.mendidx",
+    "appId": "com.rg-mx.arno",
     "directories": {
       "output": "build"
     },

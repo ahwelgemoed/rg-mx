@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 import {
   Stack,
@@ -13,47 +13,47 @@ import {
   Heading,
   ModalBody,
   ModalCloseButton,
-  useDisclosure
-} from '@chakra-ui/react'
-import { SettingsIcon } from '@chakra-ui/icons'
-import { RootStoreContext } from '../stores/RootStore'
-import { observer } from 'mobx-react-lite'
-const platform = require('os').platform()
-const slash = platform === 'darwin' ? '/' : '\\'
+  useDisclosure,
+} from "@chakra-ui/react";
+import { SettingsIcon } from "@chakra-ui/icons";
+import { RootStoreContext } from "../stores/RootStore";
+import { observer } from "mobx-react-lite";
+const platform = require("os").platform();
+const slash = platform === "darwin" ? "/" : "\\";
 export const AddProjectListModal: React.FC = observer(({}) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const projectStore = React.useContext(RootStoreContext)
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const projectStore = React.useContext(RootStoreContext);
   const [mendixAppsPath, setMendixAppsPath] = React.useState<
     string | undefined
-  >()
+  >();
 
   React.useEffect(() => {
-    setMendixAppsPath(projectStore.projectsStore.mendixProjectsPathMac)
-  }, [])
+    setMendixAppsPath(projectStore.projectsStore.mendixProjectsPathMac);
+  }, []);
   const locateGulpFile = (event: any) => {
     if (event.target.files[0]) {
-      const pathToGulp = event.target.files[0].path
-      console.log('pathToGulp', pathToGulp)
+      const pathToGulp = event.target.files[0].path;
+      console.log("pathToGulp", pathToGulp);
     }
-  }
+  };
   const locateMendixAppsPath = (event: any) => {
     if (event.target.files[0]) {
-      const pathToThisMendixProject = event.target.files[0].path
-      const split = pathToThisMendixProject.split(slash)
-      split.splice(split.length - 2, 2)
-      const joinMendixPath = split.join(slash)
-      setMendixAppsPath(joinMendixPath)
+      const pathToThisMendixProject = event.target.files[0].path;
+      const split = pathToThisMendixProject.split(slash);
+      split.splice(split.length - 2, 2);
+      const joinMendixPath = split.join(slash);
+      setMendixAppsPath(joinMendixPath);
     }
-  }
+  };
 
   const acceptAndAddProjects = () => {
     if (mendixAppsPath) {
       // Set Project Path To Mem
-      projectStore.projectsStore.setProjectPath(mendixAppsPath)
-      projectStore.projectsStore.setSortedProjects()
-      onClose()
+      projectStore.projectsStore.setProjectPath(mendixAppsPath);
+      projectStore.projectsStore.setSortedProjects();
+      onClose();
     }
-  }
+  };
   const displayMendixPath = () => {
     if (mendixAppsPath) {
       return (
@@ -61,12 +61,12 @@ export const AddProjectListModal: React.FC = observer(({}) => {
           Is this the Path To all Your Mendix Apps?:
           <Tag>{mendixAppsPath}</Tag>
         </>
-      )
+      );
     }
-  }
+  };
   return (
     <>
-      <Button mr="-px" onClick={onOpen}>
+      <Button mr="-px" colorScheme="teal" onClick={onOpen}>
         <SettingsIcon size="xs" />
       </Button>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -101,7 +101,7 @@ export const AddProjectListModal: React.FC = observer(({}) => {
           </ModalBody>
           {mendixAppsPath && (
             <ModalFooter>
-              <Button colorScheme="cyan" onClick={acceptAndAddProjects}>
+              <Button colorScheme="teal" onClick={acceptAndAddProjects}>
                 Save
               </Button>
             </ModalFooter>
@@ -109,5 +109,5 @@ export const AddProjectListModal: React.FC = observer(({}) => {
         </ModalContent>
       </Modal>
     </>
-  )
-})
+  );
+});
