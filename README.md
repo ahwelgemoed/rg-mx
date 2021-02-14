@@ -19,42 +19,93 @@
 
 - Open Mendix Projects From Mac
 - Open Styles In VS Code or Terminal
-- Open Mendix Project in Termianl or CMD
+- Open Mendix Project in Terminal or CMD
 - List all Android Simulators on device
 - Install Make it Native 8 or 9
 - List All Widgets
-- Open Windgets in VS Code or Terminal
+- Open Widgets in VS Code or Terminal
 - List all GH Users Gists
 
 <h3>The Idea behind RG-MX</h3>
 <hr/>
-As a Medix Widget Developer, I work and Develop from a Mac, but as Mendix Studio currenlty is only availabile on Windows, I use Parrales as my Windows Client.
+As a Mendix Widget Developer, I work and Develop from a Mac, but as Mendix Studio currently is only available on Windows, I use Parallels as my Windows Client.
 
-This means when I develop Widgets, I am constanly switching Views between mac with Vscode , Windows for Mendix Studio, Broweser for Web View and when I develop Native Windgets the Andriod studio aswell. When Developing I would also have to navigate in the terminal to folders in macOS for Widgets, think `yarn` commands. When building Design Systems for mendix I need to open deep nested folders to find the appropriate sass folders. As a developer who jumps constantly from one project to another I need to open and close multibile projects and on the turn of a dime beable to switch to another. The sulution is either drown in 100's of app windows or use this app.
+This means when I develop Widgets, I am switching between mac with Vscode, Windows for Mendix Studio, browser for Web View and when I develop Native Widgets the Android studio as well. When building Design Systems for Mendix I need to open deep nested folders to find the appropriate sass folders. As a developer who jumps constantly from one project to another I need to open and close multiple projects a day. This all leads to window-drown, where I have way to many windows open and that hurts my head and performance. I ideally I would like to close all I don't use and only have open only what I am working with.
 
-The idea with this app is just to make thouse every day tasks a bit easier. Within a few clicks I can open a Widget in vscode on my mac, open the appropriate Mendix app on my windows machine and startup my Android simulator with the appropriate Make it Native apps (Mx8 or Mx9). RG-MX will eaven Install the apks.
+The idea with the app is to be able to close a project and get back to it with a simple click of a button. This apps solves that.
 
 <h3>How It Works</h3>
 <hr/>
 You install the app on your windows machine and the app on your macbook.
 
-You point the Windows app to your mendix folders. Copy the Windows Address.
+You point the Windows app to your Mendix folders and Copy the Windows Address.
 
-You then go to the mac app and point it to your Mendix Apps Folders. In the Mac app you also add the windows address you added and point it to your widgets folder (if you use it), you also add your github usersname to get all your gists (again only if you use it)
+You then go to the mac app and point it to your Mendix Apps Folders. In the Mac app you also add the windows address you added and point it to your widgets folder (if you use it), you also add your github username to get all your gists (again only if you use it).
 
-<h4>Setup Setps</h4>
+This will then list out all projects you have. It then gives you the ability to open studio quickly, or Vscode ect.
+
+<h4>Setup Steps</h4>
 <h5>🛑 Before You Start</h5>
 
 For the App to work you will have some prior setup that need to be done.
 
 - VSCode must be installed and added to your PATH ([macOS](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line)/[Windows](https://code.visualstudio.com/docs/setup/windows#_installation))
-- Android Studio must be installed and Configured as Stated by React Native Team ([React Native Setup](https://reactnative.dev/docs/environment-setup#installing-dependencies))
-- Parralells must be stup acording to Mendix Docs ([Mendix Docs](https://docs.mendix.com/howto/mobile/using-mendix-studio-pro-on-a-mac))
+- (Optional) Android Studio must be installed and Configured as Stated by React Native Team ([React Native Setup](https://reactnative.dev/docs/environment-setup#installing-dependencies))
+- Parallels must be Setup according to Mendix Docs ([Mendix Docs](https://docs.mendix.com/howto/mobile/using-mendix-studio-pro-on-a-mac))
 - All Mendix projects must be in one folder (Nesting is not yet supported [see here](https://github.com/ahwelgemoed/rg-mx/projects/1#card-54876549))
-- All Widgets on Mac must be one folder
+- (Optional) All Widgets on Mac must be one folder
+<h5>1️⃣ Step One</h5>
+
+Download the `.dmg` and `.exe`, they should currently be about 200mb each.
+
+<h5>2️⃣ Step two</h5>
+
+Install the windows app, and open it up, allow network connection.
+
+<h5>3️⃣ Step three</h5>
+
+Install the mac app and open it up. You might run into permissions issues as the app is not signed. [See here](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac) how to install unsigned apps, it should be straight forward.
+
+<h5>4️⃣ Setup Windows App</h5>
+ <img  align="center" alt="headerIMG" width='400' src="./github-images/windows-app-setup.png" target="_blank" />
+
+- Click _Choose Mendix Folder Path_ and navigate to any app in your Mendix Projects folder and click on any `.mrp` file. The app should then work out were all your mendix apps are.
+
+ <img  align="center" alt="headerIMG" width='400' src="./github-images/windows-ip.png" target="_blank" />
+
+- Copy the IP address in the main window
+
+<h5>6️⃣ Setup Mac App</h5>
+ <img  align="center" alt="headerIMG" height='500' src="./github-images/mac-app-setup.png" target="_blank" />
+
+- Copy the IP from the windows app and Paste it in the "Set Windows IP"
+
+- Click _Choose Mendix Folder Path_ and navigate to any app in your Mendix Projects folder and click on any `.mrp` file. The app should then work out were all your mendix apps are.
+
+- Click _Choose Widgets Folder Path_ and navigate to the folder on your mac where all your Mendix Widgets are and select a `READ ME.md` from any of the projects
+
+- Enter the github user name of the person who _gists_ you want.
+
+ <h5>7️⃣ Done</h5>
+After this your Windows app knows where all the Mendix projects are, You Mac app know where all the projects are.
+
+Every 30 Seconds The Windows app pings the Mac app with all the projects that there are.
 
 <h3>Technical Info</h3>
 <hr/>
 
-The App is a Electron all, with a Socket IO Server.
-Both apps `.dmg` and `.exe` are exactly the same. Open startup in the main proccess, the Operationg system is detected and if its macOS it will Make a "Tray" app and if Windows it will make a "Browser" App. This is why both installs are relativly big, because the Mac app has a socket server that never gets used, and the Windows app has .apks it can never access. This was done to keep the project as simple as possabile. As keeping it all together and separating functionailty based on OS and Routes seemd very easy. It has led to some spagetti code and was more of a headace than expected, I wount recomencd anyone ever do it.
+This is a Electron app, with a Socket IO Server. certain commands from the mac is passed to the socket server where the windows app listen as executes them.
+
+Every 30 Seconde the Windows App Pings the Mendix projects.
+
+Every 15 Mins the Windows app looks for more Projects in the Mendix Folder
+
+Both apps `.dmg` and `.exe` are exactly the same.
+
+On startup in the main process, the Operating system is detected and if its macOS it will Make a "Tray" app and if Windows it will make a "Browser" App. This is why both installs are relatively big, because the Mac app has a socket server that never gets used, and the Windows app has .apks it can never access. This was done to keep the project as simple as possible, as keeping it all together and separating functionality based on OS and Routes seemed very easy. It has led to some spaghetti code and was more of a headache than expected, I would not recommend anyone ever do it.
+
+<h3>Known Issues</h3>
+<hr/>
+
+- [[Issue #1](https://github.com/ahwelgemoed/rg-mx/issues/1)]
+  Currently the app size is very big. as the `apks` for Android is shipped with it. Ideally It would be downloaded every time the user request it.
