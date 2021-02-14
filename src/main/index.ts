@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from "electron";
+import spawnAsync from "@expo/spawn-async";
 import { InitTray } from "./trayIndex";
 import { initiateServer, initiateSocket } from "./socketServer";
+const { ipcMain } = require("electron");
 const Store = require("electron-store");
 /**
  * Set `__static` path to static files in production
@@ -24,9 +26,9 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 600,
+    height: 800,
     useContentSize: true,
-    width: 1000,
+    width: 1200,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -39,10 +41,18 @@ function createWindow() {
   });
 }
 
+ipcMain.on("asynchronous-message", () => {
+  app.exit(0);
+});
+ipcMain.on("listAndroidApps", async (event: any, arg: any) => {
+  const { stdout } = await spawnAsync("emulator", ["-list-avds"]);
+  event.reply("listAndroidApps-reply", stdout);
+});
+
 app.on("ready", () => {
   if (process.platform === "darwin") {
-    // createWindow();
-    InitTray(winURL);
+    createWindow();
+    // InitTray(winURL)
   }
   if (process.platform !== "darwin") {
     createWindow();
@@ -60,7 +70,14 @@ app.on("window-all-closed", () => {
 });
 
 app.on("activate", () => {
-  if (mainWindow === null) {
+  // if (mainWindow === null) {
+  //   createWindow()
+  // }
+  if (mainWindow === null && process.platform === "darwin") {
+    // createWindow();
+    InitTray(winURL);
+  }
+  if (mainWindow === null && process.platform !== "darwin") {
     createWindow();
   }
 });

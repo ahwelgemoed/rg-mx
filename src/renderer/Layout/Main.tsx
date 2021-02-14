@@ -1,7 +1,6 @@
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
-import { useSocket } from '../utils/socketHelpers'
-import Projects from '../Pages/Projects'
+import React from "react";
+import { Switch, Route } from "react-router-dom";
+import Projects from "../Pages/Projects";
 
 const Main = () => {
   return (
@@ -10,7 +9,7 @@ const Main = () => {
         <Projects />
       </Route>
     </div>
-  )
-}
+  );
+};
 
-export default Main
+export default Main;
