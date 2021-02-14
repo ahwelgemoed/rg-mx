@@ -17,7 +17,7 @@ import {
   createStandaloneToast,
 } from "@chakra-ui/react";
 const fixPath = require("fix-path");
-import { CloseIcon, RepeatIcon } from "@chakra-ui/icons";
+import { CloseIcon, RepeatIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useSocket } from "../utils/socketHelpers";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../stores/RootStore";
@@ -27,6 +27,7 @@ import Simulator from "../Components/Simulator";
 import Widgets from "../Components/Widgets";
 import GistBoard from "../Components/GistBoard";
 import icon from "../assets/Icon-128.png";
+import { useHistory } from "react-router-dom";
 const { ipcRenderer } = require("electron");
 
 const { getCurrentWindow } = require("electron").remote;
@@ -36,6 +37,7 @@ const spawn = require("child_process").spawn;
 const toast = createStandaloneToast();
 const TrayPage = observer(() => {
   fixPath();
+  const history = useHistory();
   const mainStore = React.useContext(RootStoreContext);
   const {
     isSocketConnected,
@@ -123,6 +125,10 @@ const TrayPage = observer(() => {
       }
     });
   };
+  console.log(
+    'process.env.NODE_ENV !== "development"',
+    process.env.NODE_ENV !== "development"
+  );
   return (
     <Box p="4">
       <Stack direction="row" spacing={6} justify="space-between">
@@ -142,6 +148,15 @@ const TrayPage = observer(() => {
         </Stack>
         <ButtonGroup size="sm" isAttached>
           <TrayAppSettings />
+          {process.env.NODE_ENV === "development" && (
+            <IconButton
+              colorScheme="yellow"
+              size="xs"
+              aria-label="reload"
+              onClick={() => history.push("/Projects")}
+              icon={<ViewOffIcon />}
+            />
+          )}
           <IconButton
             colorScheme="teal"
             size="xs"

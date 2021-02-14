@@ -7,9 +7,11 @@ import {
   ButtonGroup,
   Spacer,
   List,
+  Link,
   ListItem,
   Divider,
 } from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   witchSimulatorIsInstalled,
   startupSimulator,
@@ -18,11 +20,11 @@ import {
   checkIfBootHasCompleted,
   openMendixApp,
 } from "../utils/androidSimulator";
+const { shell } = require("electron");
 
 const Simulator = () => {
-  const [listOfSims, setListOfSims] = useState<string[]>([""]);
+  const [listOfSims, setListOfSims] = useState<string[] | null>(null);
   useEffect(() => {
-    // Using an IIFE
     (async function anyNameFunction() {
       await listOfandroidSim();
     })();
@@ -63,8 +65,27 @@ const Simulator = () => {
   };
   return (
     <div>
-      <Heading mb={4}>All Installed Android Simulators</Heading>
-      {!listOfSims.length ? (
+      <Stack mb={4}>
+        <Heading>All Installed Android Simulators</Heading>
+        <Heading as="h6" size="xs">
+          Here is a list of all your installed Android Simulators. Clicking on
+          the buttons will open the simulator and install the respective Mendix
+          App.
+        </Heading>
+        <Heading as="h6" size="xs">
+          <Link
+            isExternal
+            onClick={() =>
+              shell.openExternal(
+                "https://reactnative.dev/docs/environment-setup#installing-dependencies"
+              )
+            }
+          >
+            Read Here How to Setup <ExternalLinkIcon mx="2px" />
+          </Link>
+        </Heading>
+      </Stack>
+      {!listOfSims ? (
         <Heading size="sm" mb={4}>
           No Android Simulators Installed
         </Heading>
