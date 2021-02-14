@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import { Grid, GridItem } from '@chakra-ui/react'
-import Main from './Main'
-import Sidebar from './Sidebar'
-import { Switch, Route, useHistory } from 'react-router-dom'
-import TrayPage from '../Pages/TrayPage'
+import React, { useEffect, useState } from "react";
+import { Grid, GridItem } from "@chakra-ui/react";
+import Main from "./Main";
+import Sidebar from "./Sidebar";
+import { Switch, Route, useHistory } from "react-router-dom";
+import TrayPage from "../Pages/TrayPage";
 
-const platform = require('os').platform()
+const platform = require("os").platform();
 
 const Layout = () => {
-  const [loading, setLoading] = useState(true)
-  const history = useHistory()
+  const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
-    if (platform === 'darwin') {
-      history.push('/tray')
-      setLoading(false)
+    if (platform === "darwin") {
+      history.push("/tray");
+      setLoading(false);
     } else {
-      history.push('/Projects')
-      setLoading(false)
+      history.push("/Projects");
+      setLoading(false);
     }
-  }, [])
+  }, []);
   if (loading) {
-    return <>Loading</>
+    return <>Loading</>;
   }
   return (
     <>
@@ -29,7 +29,8 @@ const Layout = () => {
         <Route path="/tray">
           <TrayPage />
         </Route>
-        <Route path="/">
+        <Main />
+        {/* <Route path="/">
           <Grid
             h="100vh"
             templateRows="repeat(1, 1fr)"
@@ -39,14 +40,12 @@ const Layout = () => {
             <GridItem rowSpan={1} colSpan={1} p="6" bg="gray.900">
               <Sidebar />
             </GridItem>
-            <GridItem rowSpan={1} colSpan={11} p="6">
-              <Main />
-            </GridItem>
+            <GridItem rowSpan={1} colSpan={11} p="6"></GridItem>
           </Grid>
-        </Route>
+        </Route> */}
       </Switch>
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

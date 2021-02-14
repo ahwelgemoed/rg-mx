@@ -16,7 +16,6 @@ import {
   Heading,
   createStandaloneToast,
 } from "@chakra-ui/react";
-const fixPath = require("fix-path");
 import { CloseIcon, RepeatIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useSocket } from "../utils/socketHelpers";
 import { observer } from "mobx-react-lite";
@@ -28,6 +27,7 @@ import Widgets from "../Components/Widgets";
 import GistBoard from "../Components/GistBoard";
 import icon from "../assets/Icon-128.png";
 import { useHistory } from "react-router-dom";
+const fixPath = require("fix-path");
 const { ipcRenderer } = require("electron");
 const platform = require("os").platform();
 const { getCurrentWindow } = require("electron").remote;
@@ -76,7 +76,6 @@ const TrayPage = observer(() => {
     const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}`;
     const openMX = spawn("code", [projectPath], { stdio: "inherit" });
     openMX.stderr.on("data", (data: any) => {
-      console.log("data", data);
       toast({
         status: "error",
         title: "Error",
@@ -125,10 +124,7 @@ const TrayPage = observer(() => {
       }
     });
   };
-  console.log(
-    'process.env.NODE_ENV !== "development"',
-    process.env.NODE_ENV !== "development"
-  );
+
   return (
     <Box p="4">
       <Stack direction="row" spacing={6} justify="space-between">

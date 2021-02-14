@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 import {
   Heading,
   Button,
@@ -18,25 +18,25 @@ import {
   List,
   ListItem,
   Divider,
-  Link,
-} from "@chakra-ui/react";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { format } from "date-fns";
-const { shell } = require("electron");
+  Link
+} from '@chakra-ui/react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { format } from 'date-fns'
+const { shell } = require('electron')
 type GistBoardProps = {
   ghUserName: string;
 };
 const GistBoard = ({ ghUserName }: GistBoardProps) => {
-  const [listOfgists, setListOfgists] = useState<any[] | null>(null);
-  const [openState, setopenState] = useState<number | undefined>();
+  const [listOfgists, setListOfgists] = useState<any[] | null>(null)
+  const [openState, setopenState] = useState<number | undefined>()
   useEffect(() => {
-    console.log("ghUserName", ghUserName);
+    console.log('ghUserName', ghUserName)
     if (ghUserName) {
       fetch(`https://api.github.com/users/${ghUserName}/gists`)
         .then((response) => response.json())
-        .then((data) => setListOfgists(data));
+        .then((data) => setListOfgists(data))
     }
-  }, [ghUserName]);
+  }, [ghUserName])
   return (
     <div>
       <List spacing={3}>
@@ -51,7 +51,7 @@ const GistBoard = ({ ghUserName }: GistBoardProps) => {
 
         {listOfgists &&
           listOfgists.map((gist, i) => {
-            const files = Object.entries(gist.files);
+            const files = Object.entries(gist.files)
             return (
               <div key={i * 898}>
                 <Stack direction="row" spacing={6} justify="space-between">
@@ -60,7 +60,7 @@ const GistBoard = ({ ghUserName }: GistBoardProps) => {
                   </Box>
                   <Stack direction="row">
                     <Text mr="4" color="teal.700">
-                      {format(new Date(gist.updated_at), "dd/MM/yyyy")}
+                      {format(new Date(gist.updated_at), 'dd/MM/yyyy')}
                     </Text>
                     <ButtonGroup size="sm" isAttached>
                       <Button
@@ -80,7 +80,7 @@ const GistBoard = ({ ghUserName }: GistBoardProps) => {
                             : setopenState(i)
                         }
                       >
-                        {openState === i ? "Close Files" : "Expand Files"}
+                        {openState === i ? 'Close Files' : 'Expand Files'}
                       </Button>
                     </ButtonGroup>
                   </Stack>
@@ -101,7 +101,7 @@ const GistBoard = ({ ghUserName }: GistBoardProps) => {
                             <Td>{file[0]}</Td>
                             <Td>{file[1] && file[1].language}</Td>
                             <Td>
-                              {" "}
+                              {' '}
                               <Button
                                 colorScheme="teal"
                                 size="xs"
@@ -113,18 +113,18 @@ const GistBoard = ({ ghUserName }: GistBoardProps) => {
                               </Button>
                             </Td>
                           </Tr>
-                        );
+                        )
                       })}
                     </Tbody>
                   </Table>
                 )}
                 <Divider />
               </div>
-            );
+            )
           })}
       </List>
     </div>
-  );
-};
+  )
+}
 
-export default GistBoard;
+export default GistBoard

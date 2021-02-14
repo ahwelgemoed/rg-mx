@@ -1,132 +1,132 @@
-import { useEffect, useRef, useState, useContext } from 'react'
+import { useEffect, useRef, useState, useContext } from "react";
 // import socketIOClient from "socket.io-client";
-import socketIOClient from 'socket.io-client'
-import { createStandaloneToast } from '@chakra-ui/react'
-import { RootStoreContext } from '../stores/RootStore'
-import { socketMessage } from '../../socketMessages'
+import socketIOClient from "socket.io-client";
+import { createStandaloneToast } from "@chakra-ui/react";
+import { RootStoreContext } from "../stores/RootStore";
+import { socketMessage } from "../../socketMessages";
 
-const toast = createStandaloneToast()
+const toast = createStandaloneToast();
 
 type UseSocketTypes = {
   windowsIp: string;
 };
 export const useSocket = (props: UseSocketTypes) => {
   // const SOCKET_SERVER_URL = props && `http://10.211.55.4:7891`;
-  const SOCKET_SERVER_URL = props && `http://${props.windowsIp}:7891`
-  const [socketProjects, setSocketProjects] = useState()
-  const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false)
+  const SOCKET_SERVER_URL = props && `http://${props.windowsIp}:7891`;
+  const [socketProjects, setSocketProjects] = useState();
+  const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false);
 
-  const projectStore = useContext(RootStoreContext)
-  const [openProjectInStudio, setopenProjectInStudio] = useState<string>('')
+  const projectStore = useContext(RootStoreContext);
+  const [openProjectInStudio, setopenProjectInStudio] = useState<string>("");
   const socketRef = useRef<SocketIOClient.Socket>(
     socketIOClient(SOCKET_SERVER_URL)
-  )
+  );
   const tryReconnect = () => {
     setTimeout(() => {
       socketRef.current.io.open((err) => {
         if (err) {
-          tryReconnect()
+          tryReconnect();
         }
-      })
-    }, 2000)
-  }
+      });
+    }, 2000);
+  };
   useEffect(() => {
     //   @ts-ignore
-    socketRef.current = socketIOClient(SOCKET_SERVER_URL)
+    socketRef.current = socketIOClient(SOCKET_SERVER_URL);
 
-    socketRef.current.on('connect', () => {})
-    socketRef.current.on('close', (Arno: any) => console.log('Arno', Arno))
+    socketRef.current.on("connect", () => {});
+    socketRef.current.on("close", (Arno: any) => console.log("Arno", Arno));
 
-    socketRef.current.on('disconnect', () => {
-      setIsSocketConnected(false)
-      tryReconnect()
-      console.log('Disconnected')
-    })
+    socketRef.current.on("disconnect", () => {
+      setIsSocketConnected(false);
+      tryReconnect();
+      console.log("Disconnected");
+    });
     socketRef.current.on(socketMessage.ALL_PROJECTS, (message: any) => {
-      setSocketProjects(message)
-    })
+      setSocketProjects(message);
+    });
     socketRef.current.on(socketMessage.OPEN_IN_STUDIO, (message: any) => {
-      setopenProjectInStudio(message)
+      setopenProjectInStudio(message);
       setTimeout(() => {
-        setopenProjectInStudio('')
-      }, 2000)
-    })
+        setopenProjectInStudio("");
+      }, 2000);
+    });
     socketRef.current.on(socketMessage.OPEN_IN_WINDOWS_CMD, (message: any) => {
-      const prjToOpen = JSON.parse(message.body)
+      const prjToOpen = JSON.parse(message.body);
       projectStore.projectsStore.openProjectInCMD(
         prjToOpen,
         projectStore.projectsStore.mendixProjectsPathMac
-      )
-    })
+      );
+    });
     return () => {
       //   @ts-ignore
-      socketRef.current.disconnect()
-    }
-  }, [])
+      socketRef.current.disconnect();
+    };
+  }, []);
   useEffect(() => {
     if (socketRef.current) {
       // @ts-ignore
       if (socketRef.current.connected) {
-        setIsSocketConnected(true)
+        setIsSocketConnected(true);
         toast({
-          title: 'Windows Connected',
-          status: 'success',
+          title: "Windows Connected",
+          status: "success",
           duration: 7000,
-          position: 'top',
-          isClosable: true
-        })
+          position: "top",
+          isClosable: true,
+        });
       }
       if (socketRef.current.disconnected && isSocketConnected) {
-        setIsSocketConnected(false)
+        setIsSocketConnected(false);
         toast({
-          title: 'Windows Disconnected',
-          status: 'error',
+          title: "Windows Disconnected",
+          status: "error",
           duration: 7000,
-          position: 'top',
-          isClosable: true
-        })
+          position: "top",
+          isClosable: true,
+        });
       }
     }
-  }, [socketRef.current.connected, socketRef.current.disconnected])
+  }, [socketRef.current.connected, socketRef.current.disconnected]);
 
   const sendProjects = (messageBody: any) => {
     console.log("ME!", messageBody);
     socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
-      messageBody: stringMyBody(messageBody)
-    })
-  }
+      messageBody: stringMyBody(messageBody),
+    });
+  };
   const sendOpenStudioInProject = (messageBody: any) => {
     socketRef.current.emit(socketMessage.OPEN_IN_STUDIO, {
       body: stringMyBody(messageBody),
-      senderId: socketRef.current.id
-    })
+      senderId: socketRef.current.id,
+    });
     toast({
       title: `Opening ${messageBody}`,
-      status: 'success',
+      status: "success",
       duration: 7000,
-      position: 'top',
-      isClosable: true
-    })
-  }
+      position: "top",
+      isClosable: true,
+    });
+  };
   const sendOpenInCMD = (messageBody: any) => {
     socketRef.current.emit(socketMessage.OPEN_IN_WINDOWS_CMD, {
       body: stringMyBody(messageBody),
-      senderId: socketRef.current.id
-    })
+      senderId: socketRef.current.id,
+    });
     toast({
       title: `Opening ${messageBody}`,
-      status: 'success',
+      status: "success",
       duration: 7000,
-      position: 'top',
-      isClosable: true
-    })
-  }
+      position: "top",
+      isClosable: true,
+    });
+  };
   const sendOpenInVsCode = (messageBody: any) => {
     socketRef.current.emit(socketMessage.OPEN_IN_VSCODE, {
       body: stringMyBody(messageBody),
-      senderId: socketRef.current.id
-    })
-  }
+      senderId: socketRef.current.id,
+    });
+  };
   return {
     isSocketConnected,
     sendOpenInVsCode,
@@ -134,9 +134,9 @@ export const useSocket = (props: UseSocketTypes) => {
     sendProjects,
     sendOpenStudioInProject,
     socketProjects,
-    openProjectInStudio
-  }
-}
+    openProjectInStudio,
+  };
+};
 const stringMyBody = (body: any) => {
-  return JSON.stringify(body)
-}
+  return JSON.stringify(body);
+};
