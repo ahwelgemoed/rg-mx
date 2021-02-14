@@ -130,7 +130,7 @@ const TrayPage = observer(() => {
         <Stack direction="row" alignItems="center">
           <Image boxSize="80px" src={icon} alt="Segun Adebayo" />
           <Stack direction="column" mb="4">
-            <Heading>Mendid-X </Heading>
+            <Heading>rg-mx </Heading>
             <Badge
               colorScheme={isSocketConnected ? "teal" : "red"}
               borderRadius="5px"
@@ -220,7 +220,7 @@ const TrayPage = observer(() => {
 
 export default TrayPage;
 
-// TypeError: Error processing argument at index 0, conversion failure from /Applications/Mendid-X.app/Contents/Resources/app.asar/dist/electron/trayIcon.png
-// at u (/Applications/Mendid-X.app/Contents/Resources/app.asar/dist/electron/main.js:8:28791)
-// at App.<anonymous> (/Applications/Mendid-X.app/Contents/Resources/app.asar/dist/electron/main.js:8:30230)
+// TypeError: Error processing argument at index 0, conversion failure from /Applications/rg-mx.app/Contents/Resources/app.asar/dist/electron/trayIcon.png
+// at u (/Applications/rg-mx.app/Contents/Resources/app.asar/dist/electron/main.js:8:28791)
+// at App.<anonymous> (/Applications/rg-mx.app/Contents/Resources/app.asar/dist/electron/main.js:8:30230)
 // at App.emit (events.js:208:15)

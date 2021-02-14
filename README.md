@@ -5,10 +5,10 @@
     <img alt="License: MIT" src="https://img.shields.io/badge/Status-Beta-blue?style=for-the-badge" target="_blank" />
   </a>
   <a href="">
-    <img alt="License: MIT" src="https://img.shields.io/github/issues/ahwelgemoed/mendid-x?style=for-the-badge" target="_blank" />
+    <img alt="License: MIT" src="https://img.shields.io/github/issues/ahwelgemoed/rg-mx?style=for-the-badge" target="_blank" />
   </a>
   <a href="">
-    <img alt="GitHub issues" src="https://img.shields.io/github/release/ahwelgemoed/mendid-x?style=for-the-badge" target="_blank" />
+    <img alt="GitHub issues" src="https://img.shields.io/github/release/ahwelgemoed/rg-mx?style=for-the-badge" target="_blank" />
   </a>
   <a href="/LICENSE">
     <img alt="License: MIT" src="https://img.shields.io/badge/license-Apache%202.0-orange.svg?style=for-the-badge" target="_blank" />
@@ -50,7 +50,7 @@ For the App to work you will have some prior setup that need to be done.
 - VSCode must be installed and added to your PATH ([macOS](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line)/[Windows](https://code.visualstudio.com/docs/setup/windows#_installation))
 - Android Studio must be installed and Configured as Stated by React Native Team ([React Native Setup](https://reactnative.dev/docs/environment-setup#installing-dependencies))
 - Parralells must be stup acording to Mendix Docs ([Mendix Docs](https://docs.mendix.com/howto/mobile/using-mendix-studio-pro-on-a-mac))
-- All Mendix projects must be in one folder (Nesting is not yet supported [see here](https://github.com/ahwelgemoed/mendid-x/projects/1#card-54876549))
+- All Mendix projects must be in one folder (Nesting is not yet supported [see here](https://github.com/ahwelgemoed/rg-mx/projects/1#card-54876549))
 - All Widgets on Mac must be one folder
 
 <h3>Technical Info</h3>
