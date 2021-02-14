@@ -31,7 +31,6 @@ const fixPath = require("fix-path");
 const { ipcRenderer } = require("electron");
 const platform = require("os").platform();
 const { getCurrentWindow } = require("electron").remote;
-// const spawn = require("cross-spawn");
 const spawn = require("child_process").spawn;
 
 const toast = createStandaloneToast();

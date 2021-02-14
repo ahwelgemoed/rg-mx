@@ -107,7 +107,7 @@ const Projects: React.FC = observer(() => {
         <Box maxW="32rem">
           <Heading mb={4}>Projects</Heading>
           <Text fontSize="xl">
-            <Tag size="sm" colorScheme="cyan" borderRadius="full">
+            <Tag size="sm" colorScheme="teal" borderRadius="full">
               <TagLabel>
                 {projectStore.projectsStore.mendixProjectsPathMac
                   ? projectStore.projectsStore.mendixProjectsPathMac

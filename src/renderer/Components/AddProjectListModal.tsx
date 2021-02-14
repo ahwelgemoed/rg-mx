@@ -101,7 +101,7 @@ export const AddProjectListModal: React.FC = observer(({}) => {
           </ModalBody>
           {mendixAppsPath && (
             <ModalFooter>
-              <Button colorScheme="cyan" onClick={acceptAndAddProjects}>
+              <Button colorScheme="teal" onClick={acceptAndAddProjects}>
                 Save
               </Button>
             </ModalFooter>

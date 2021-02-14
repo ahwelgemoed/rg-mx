@@ -4,6 +4,8 @@ import socketIOClient from "socket.io-client";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { RootStoreContext } from "../stores/RootStore";
 import { socketMessage } from "../../socketMessages";
+const electron = require("electron");
+import icon from "../assets/Icon-128.png";
 
 const toast = createStandaloneToast();
 
@@ -68,6 +70,13 @@ export const useSocket = (props: UseSocketTypes) => {
       // @ts-ignore
       if (socketRef.current.connected) {
         setIsSocketConnected(true);
+        const windowsDiss = new electron.remote.Notification({
+          title: "Windows Connected",
+          body: "Your Windows App Connected",
+          silent: true,
+          icon: icon,
+        });
+        windowsDiss.show();
         toast({
           title: "Windows Connected",
           status: "success",
@@ -78,6 +87,13 @@ export const useSocket = (props: UseSocketTypes) => {
       }
       if (socketRef.current.disconnected && isSocketConnected) {
         setIsSocketConnected(false);
+        const windowsDiss = new electron.remote.Notification({
+          title: "Windows Disconnected",
+          body: "Your Windows App Disconnected",
+          silent: true,
+          icon: icon,
+        });
+        windowsDiss.show();
         toast({
           title: "Windows Disconnected",
           status: "error",
@@ -90,7 +106,6 @@ export const useSocket = (props: UseSocketTypes) => {
   }, [socketRef.current.connected, socketRef.current.disconnected]);
 
   const sendProjects = (messageBody: any) => {
-    console.log("ME!", messageBody);
     socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
       messageBody: stringMyBody(messageBody),
     });
