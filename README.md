@@ -2,7 +2,7 @@
   <br/>  <br/>
 <p align="center">
   <a href="">
-    <img alt="License: MIT" src="https://img.shields.io/badge/Status-Beta-blue?style=for-the-badge" target="_blank" />
+    <img alt="License: MIT" src="https://img.shields.io/badge/Status-Very Beta-blue?style=for-the-badge" target="_blank" />
   </a>
   <a href="">
     <img alt="License: MIT" src="https://img.shields.io/github/issues/ahwelgemoed/rg-mx?style=for-the-badge" target="_blank" />
@@ -45,28 +45,31 @@ You then go to the mac app and point it to your Mendix Apps Folders. In the Mac 
 This will then list out all projects you have. It then gives you the ability to open studio quickly, or Vscode ect.
 
 <h4>Setup Steps</h4>
-<h5>🛑 Before You Start</h5>
+<br/>
+<h4>🛑 Before You Start</h4>
 
 For the App to work you will have some prior setup that need to be done.
 
 - VSCode must be installed and added to your PATH ([macOS](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line)/[Windows](https://code.visualstudio.com/docs/setup/windows#_installation))
-- (Optional) Android Studio must be installed and Configured as Stated by React Native Team ([React Native Setup](https://reactnative.dev/docs/environment-setup#installing-dependencies))
 - Parallels must be Setup according to Mendix Docs ([Mendix Docs](https://docs.mendix.com/howto/mobile/using-mendix-studio-pro-on-a-mac))
 - All Mendix projects must be in one folder (Nesting is not yet supported [see here](https://github.com/ahwelgemoed/rg-mx/projects/1#card-54876549))
+- (Optional) Android Studio must be installed and Configured as Stated by React Native Team ([React Native Setup](https://reactnative.dev/docs/environment-setup#installing-dependencies))
 - (Optional) All Widgets on Mac must be one folder
-<h5>1️⃣ Step One</h5>
+
+<br/>
+<h4>1️⃣ Step One</h4>
 
 Download the `.dmg` and `.exe`, they should currently be about 200mb each.
 
-<h5>2️⃣ Step two</h5>
+<h4>2️⃣ Step two</h4>
 
 Install the windows app, and open it up, allow network connection.
 
-<h5>3️⃣ Step three</h5>
+<h4>3️⃣ Step three</h4>
 
 Install the mac app and open it up. You might run into permissions issues as the app is not signed. [See here](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac) how to install unsigned apps, it should be straight forward.
 
-<h5>4️⃣ Setup Windows App</h5>
+<h4>4️⃣ Setup Windows App</h4>
  <img  align="center" alt="headerIMG" width='400' src="./github-images/windows-app-setup.png" target="_blank" />
 
 - Click _Choose Mendix Folder Path_ and navigate to any app in your Mendix Projects folder and click on any `.mrp` file. The app should then work out were all your mendix apps are.
@@ -75,7 +78,7 @@ Install the mac app and open it up. You might run into permissions issues as the
 
 - Copy the IP address in the main window
 
-<h5>6️⃣ Setup Mac App</h5>
+<h4>6️⃣ Setup Mac App</h4>
  <img  align="center" alt="headerIMG" height='500' src="./github-images/mac-app-setup.png" target="_blank" />
 
 - Copy the IP from the windows app and Paste it in the "Set Windows IP"
@@ -86,7 +89,7 @@ Install the mac app and open it up. You might run into permissions issues as the
 
 - Enter the github user name of the person who _gists_ you want.
 
- <h5>7️⃣ Done</h5>
+ <h4>7️⃣ Done</h4>
 After this your Windows app knows where all the Mendix projects are, You Mac app know where all the projects are.
 
 Every 30 Seconds The Windows app pings the Mac app with all the projects that there are.
@@ -103,6 +106,12 @@ Every 15 Mins the Windows app looks for more Projects in the Mendix Folder
 Both apps `.dmg` and `.exe` are exactly the same.
 
 On startup in the main process, the Operating system is detected and if its macOS it will Make a "Tray" app and if Windows it will make a "Browser" App. This is why both installs are relatively big, because the Mac app has a socket server that never gets used, and the Windows app has .apks it can never access. This was done to keep the project as simple as possible, as keeping it all together and separating functionality based on OS and Routes seemed very easy. It has led to some spaghetti code and was more of a headache than expected, I would not recommend anyone ever do it.
+
+<h3>FAQ</h3>
+<hr/>
+Q - "I use alfred, why do I need this?"
+
+A- You don't
 
 <h3>Known Issues</h3>
 <hr/>
