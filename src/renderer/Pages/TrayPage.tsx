@@ -29,14 +29,14 @@ import GistBoard from "../Components/GistBoard";
 import icon from "../assets/Icon-128.png";
 import { useHistory } from "react-router-dom";
 const { ipcRenderer } = require("electron");
-
+const platform = require("os").platform();
 const { getCurrentWindow } = require("electron").remote;
 // const spawn = require("cross-spawn");
 const spawn = require("child_process").spawn;
 
 const toast = createStandaloneToast();
 const TrayPage = observer(() => {
-  fixPath();
+  platform === "darwin" && fixPath(); // Super important for MAC Path Fixes
   const history = useHistory();
   const mainStore = React.useContext(RootStoreContext);
   const {
