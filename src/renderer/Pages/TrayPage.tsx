@@ -16,6 +16,7 @@ import {
   Heading,
   createStandaloneToast,
 } from "@chakra-ui/react";
+import { MdComputer } from "react-icons/md";
 import { CloseIcon, RepeatIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useSocket } from "../utils/socketHelpers";
 import { observer } from "mobx-react-lite";
@@ -123,6 +124,39 @@ const TrayPage = observer(() => {
       }
     });
   };
+  const startParallelsAndWindows = () => {
+    // open -a "Parallels Desktop"
+    console.log("startParallelsAndWindows", mainStore.macStore.macProjectsPath);
+    const a = mainStore.macStore.macProjectsPath.split("[C]");
+    const y = a.find((q) => {
+      return q.includes("Windows");
+    });
+    console.log("a", y.trim());
+    const openMX = spawn("open", ["-a", "Parallels Desktop"], {
+      stdio: "inherit",
+    });
+    openMX.stderr.on("data", (data: any) => {
+      toast({
+        status: "error",
+        title: "Error",
+        description: `${data}`,
+        duration: 7000,
+        position: "top",
+        isClosable: true,
+      });
+    });
+    openMX.on("close", (code: any) => {
+      if (!code) {
+        toast({
+          title: `Opening Parallels - Base`,
+          status: "success",
+          duration: 7000,
+          position: "top",
+          isClosable: true,
+        });
+      }
+    });
+  };
 
   return (
     <Box p="4">
@@ -130,7 +164,7 @@ const TrayPage = observer(() => {
         <Stack direction="row" alignItems="center">
           <Image boxSize="80px" src={icon} alt="Segun Adebayo" />
           <Stack direction="column" mb="4">
-            <Heading>rg-mx </Heading>
+            <Heading>RG-MX</Heading>
             <Badge
               colorScheme={isSocketConnected ? "teal" : "red"}
               borderRadius="5px"
@@ -143,15 +177,14 @@ const TrayPage = observer(() => {
         </Stack>
         <ButtonGroup size="sm" isAttached>
           <TrayAppSettings />
-          {process.env.NODE_ENV === "development" && (
-            <IconButton
-              colorScheme="yellow"
-              size="xs"
-              aria-label="reload"
-              onClick={() => history.push("/Projects")}
-              icon={<ViewOffIcon />}
-            />
-          )}
+
+          <IconButton
+            colorScheme="yellow"
+            size="xs"
+            aria-label="reload"
+            onClick={() => startParallelsAndWindows()}
+            icon={<MdComputer />}
+          />
           <IconButton
             colorScheme="teal"
             size="xs"
