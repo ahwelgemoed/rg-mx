@@ -32,6 +32,7 @@ export const useSocket = (props: UseSocketTypes) => {
       });
     }, 2000);
   };
+
   useEffect(() => {
     //   @ts-ignore
     socketRef.current = socketIOClient(SOCKET_SERVER_URL);
@@ -44,7 +45,16 @@ export const useSocket = (props: UseSocketTypes) => {
       tryReconnect();
       console.log("Disconnected");
     });
+
+    // socketRef.current.on(socketMessage.NEW_CLIENT, () => {
+    //   if (projectStore.projectsStore.projectsSorted) {
+    //     socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
+    //       messageBody: stringMyBody(projectStore.projectsStore.projectsSorted),
+    //     });
+    //   }
+    // });
     socketRef.current.on(socketMessage.ALL_PROJECTS, (message: any) => {
+      console.log("message", message);
       setSocketProjects(message);
     });
     socketRef.current.on(socketMessage.OPEN_IN_STUDIO, (message: any) => {
@@ -77,13 +87,6 @@ export const useSocket = (props: UseSocketTypes) => {
           icon: icon,
         });
         windowsDiss.show();
-        toast({
-          title: "Windows Connected",
-          status: "success",
-          duration: 7000,
-          position: "top",
-          isClosable: true,
-        });
       }
       if (socketRef.current.disconnected && isSocketConnected) {
         setIsSocketConnected(false);

@@ -87,7 +87,6 @@ export class ProjectsStore {
     this.setLoading(true);
     setTimeout(() => {
       let sortableUnq: string[] = [""];
-      console.log("this.mendixProjectsPathMac", this.mendixProjectsPathMac);
       if (!this.mendixProjectsPathMac) {
         this.setLoading(false);
         toast({
@@ -98,7 +97,6 @@ export class ProjectsStore {
           isClosable: true,
         });
       }
-      // console.log("this.mendixProjectsPathMac", );
       const rawFiles = fs.readdirSync(this.mendixProjectsPathMac);
       rawFiles.forEach((file) => {
         const PROJECT_PATH = `${this.mendixProjectsPathMac}/${file}`;
