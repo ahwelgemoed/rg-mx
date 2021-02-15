@@ -17,6 +17,7 @@ import {
   ListItem,
   Divider,
 } from "@chakra-ui/react";
+import { ChevronRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
 const platform = require("os").platform();
 import { observer } from "mobx-react-lite";
 import { FolderNamesType, ProjectType } from "../types/projectTypes";
@@ -77,7 +78,15 @@ const ListOfProjects = observer(
                           : setopenState(i)
                       }
                     >
-                      {openState === i ? "Close" : "Open"}
+                      {openState === i ? (
+                        <>
+                          Close <ChevronDownIcon />
+                        </>
+                      ) : (
+                        <>
+                          Expand <ChevronRightIcon />
+                        </>
+                      )}
                     </Button>
                   </Box>
                 </Flex>
@@ -94,8 +103,8 @@ const ListOfProjects = observer(
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {item.folderNames.map((fileNames) => (
-                        <Tr>
+                      {item.folderNames.map((fileNames, keyA) => (
+                        <Tr key={keyA * 9911}>
                           <Td>{fileNames.name}</Td>
                           <Td>
                             {format(

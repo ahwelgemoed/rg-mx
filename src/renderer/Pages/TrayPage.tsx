@@ -128,7 +128,7 @@ const TrayPage = observer(() => {
     <Box p="4">
       <Stack direction="row" spacing={6} justify="space-between">
         <Stack direction="row" alignItems="center">
-          <Image boxSize="80px" src={icon} alt="Segun Adebayo" />
+          <Image boxSize="80px" src={icon} alt="RG_MX" />
           <Stack direction="column" mb="4">
             <Heading>rg-mx </Heading>
             <Badge

@@ -9,10 +9,15 @@ import {
   Button,
   Flex,
   Text,
+  IconButton,
   createStandaloneToast,
   Box,
   useClipboard,
+  Image,
 } from "@chakra-ui/react";
+const { getCurrentWindow } = require("electron").remote;
+import { RepeatIcon } from "@chakra-ui/icons";
+import icon from "../assets/Icon-128.png";
 const spawn = require("cross-spawn");
 import { getWindowsIp } from "../utils";
 import { useSocket } from "../utils/socketHelpers";
@@ -26,11 +31,7 @@ const toast = createStandaloneToast();
 const Projects: React.FC = observer(() => {
   const iPWindows = getWindowsIp().address;
   const { hasCopied, onCopy } = useClipboard(iPWindows);
-  const {
-    sendProjects,
-    sendOpenStudioInProject,
-    openProjectInStudio,
-  } = useSocket({
+  const { sendProjects, openProjectInStudio } = useSocket({
     windowsIp: iPWindows,
   });
   const [loading, setLoading] = useState(true);
@@ -79,7 +80,6 @@ const Projects: React.FC = observer(() => {
     const projectPath = `${projectStore.projectsStore.mendixProjectsPathMac}/${projectName}/theme/styles`;
     const openMX = spawn("code", [projectPath]);
     openMX.stderr.on("data", (data: any) => {
-      console.log("data", data);
       toast({
         status: "error",
         title: "Error",
@@ -101,25 +101,31 @@ const Projects: React.FC = observer(() => {
       }
     });
   };
+
   return (
     <Box p="4">
       <Stack direction="row" spacing={6} justify="space-between">
         <Box maxW="32rem">
-          <Heading mb={4}>Projects</Heading>
-          <Text fontSize="xl">
-            <Tag size="sm" colorScheme="teal" borderRadius="full">
-              <TagLabel>
-                {projectStore.projectsStore.mendixProjectsPathMac
-                  ? projectStore.projectsStore.mendixProjectsPathMac
-                  : "No Apps Folder"}
-              </TagLabel>
-            </Tag>
-          </Text>
+          <Stack direction="row" alignItems="center" mb="4">
+            <Image boxSize="80px" src={icon} alt="RG_MX" />
+            <Stack direction="column">
+              <Heading>RG-MX</Heading>
+              <Text fontSize="xl">
+                <Tag size="sm" colorScheme="teal" borderRadius="5px">
+                  <TagLabel>
+                    {projectStore.projectsStore.mendixProjectsPathMac
+                      ? projectStore.projectsStore.mendixProjectsPathMac
+                      : "No Apps Folder"}
+                  </TagLabel>
+                </Tag>
+              </Text>
+            </Stack>
+          </Stack>
         </Box>
         <Flex mb={2}></Flex>
-        <ButtonGroup size="sm" isAttached>
+        <ButtonGroup size="xs" isAttached>
           <Button
-            size="sm"
+            size="xs"
             onClick={onCopy}
             colorScheme="teal"
             variant="outline"
@@ -127,10 +133,17 @@ const Projects: React.FC = observer(() => {
             {iPWindows} <CopyIcon ml="4" w={4} h={4} color="teal" />
           </Button>
           <ReloadProjectsFolder />
+          <IconButton
+            colorScheme="yellow"
+            size="xs"
+            aria-label="reload"
+            onClick={() => getCurrentWindow().reload()}
+            icon={<RepeatIcon />}
+          />
           <AddProjectListModal />
         </ButtonGroup>
       </Stack>
-      {loading ? (
+      {loading || projectStore.projectsStore.projectLoading ? (
         <>
           <Skeleton height="20px" mb="4" />
           <Skeleton height="20px" mb="4" />

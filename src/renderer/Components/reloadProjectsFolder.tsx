@@ -20,7 +20,7 @@ const reloadProjectsFolder = observer(() => {
   }, []);
   return (
     <Button
-      size="sm"
+      size="xs"
       variant="outline"
       colorScheme={mainStore.projectsStore.projectLoading ? "pink" : "teal"}
       isLoading={mainStore.projectsStore.projectLoading}
