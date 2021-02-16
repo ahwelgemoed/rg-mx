@@ -77,9 +77,10 @@ export const TrayAppSettings: React.FC = observer(({}) => {
     if (mendixAppsPath && windowsIP) {
       setIsLoading(true);
       mainStore.macStore.setWindowsIp(windowsIP);
-      mainStore.macStore.setGithubName(githubUserName);
-      mainStore.macStore.setMacWidgetsPath(mendixWidgetsAppsPath as string);
       mainStore.macStore.setMacProjectsPath(mendixAppsPath);
+      githubUserName && mainStore.macStore.setGithubName(githubUserName);
+      mendixWidgetsAppsPath &&
+        mainStore.macStore.setMacWidgetsPath(mendixWidgetsAppsPath as string);
       setTimeout(() => {
         getCurrentWindow().reload();
         onClose();

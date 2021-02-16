@@ -7,11 +7,7 @@ const socketIOServer = require("socket.io")(http, {
   },
 });
 export const initiateSocket = () => {
-  console.log("SOCKET");
-
   socketIOServer.on("connection", (socket: any) => {
-    // console.info(`Client connected [id=${socket.id}]`);
-
     socket.broadcast.emit(socketMessage.NEW_CLIENT, "");
 
     socket.on(socketMessage.ALL_PROJECTS, (data: any) => {
@@ -26,14 +22,9 @@ export const initiateSocket = () => {
       socket.broadcast.emit(socketMessage.OPEN_IN_WINDOWS_CMD, data);
     });
 
-    // when socket disconnects, remove it from the list:
     socket.on("disconnect", () => {
       console.info(`Client gone [id=${socket.id}]`);
     });
   });
 };
 export const initiateServer = http.listen(7891);
-
-//   (async () => {
-
-//   })();

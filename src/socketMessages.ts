@@ -5,3 +5,6 @@ export const socketMessage = {
   OPEN_IN_WINDOWS_CMD: "sendOpenInWindowsCmd",
   NEW_CLIENT: "newClient",
 };
+export const MainMessages = {
+  CLOSE_APP: "closeApp",
+};

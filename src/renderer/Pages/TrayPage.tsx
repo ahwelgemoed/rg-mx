@@ -17,6 +17,7 @@ import {
   createStandaloneToast,
 } from "@chakra-ui/react";
 import { MdComputer } from "react-icons/md";
+import { MainMessages } from "../../socketMessages";
 import { CloseIcon, RepeatIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useSocket } from "../utils/socketHelpers";
 import { observer } from "mobx-react-lite";
@@ -125,30 +126,13 @@ const TrayPage = observer(() => {
     });
   };
   const startParallelsAndWindows = () => {
-    // open -a "Parallels Desktop"
-    console.log("startParallelsAndWindows", mainStore.macStore.macProjectsPath);
-    const a = mainStore.macStore.macProjectsPath.split("[C]");
-    const y = a.find((q) => {
-      return q.includes("Windows");
-    });
-    console.log("a", y.trim());
     const openMX = spawn("open", ["-a", "Parallels Desktop"], {
       stdio: "inherit",
-    });
-    openMX.stderr.on("data", (data: any) => {
-      toast({
-        status: "error",
-        title: "Error",
-        description: `${data}`,
-        duration: 7000,
-        position: "top",
-        isClosable: true,
-      });
     });
     openMX.on("close", (code: any) => {
       if (!code) {
         toast({
-          title: `Opening Parallels - Base`,
+          title: `Opening Parallels Desktop`,
           status: "success",
           duration: 7000,
           position: "top",
@@ -181,6 +165,7 @@ const TrayPage = observer(() => {
           <IconButton
             colorScheme="yellow"
             size="xs"
+            variant="outline"
             aria-label="reload"
             onClick={() => startParallelsAndWindows()}
             icon={<MdComputer />}
@@ -195,12 +180,7 @@ const TrayPage = observer(() => {
           <IconButton
             size="xs"
             colorScheme="red"
-            onClick={() =>
-              ipcRenderer.send(
-                "asynchronous-message",
-                "example example send to main process"
-              )
-            }
+            onClick={() => ipcRenderer.send(MainMessages.CLOSE_APP)}
             aria-label="close"
             icon={<CloseIcon />}
           />
@@ -252,8 +232,3 @@ const TrayPage = observer(() => {
 });
 
 export default TrayPage;
-
-// TypeError: Error processing argument at index 0, conversion failure from /Applications/rg-mx.app/Contents/Resources/app.asar/dist/electron/trayIcon.png
-// at u (/Applications/rg-mx.app/Contents/Resources/app.asar/dist/electron/main.js:8:28791)
-// at App.<anonymous> (/Applications/rg-mx.app/Contents/Resources/app.asar/dist/electron/main.js:8:30230)
-// at App.emit (events.js:208:15)
