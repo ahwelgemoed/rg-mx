@@ -31,7 +31,7 @@ export class ProjectsStore {
   }
 
   checkForMPR = (name: string): boolean => {
-    return !name.includes("_") && name.substr(name.length - 4) == ".mpr";
+    return name.substr(name.length - 4) == ".mpr";
   };
 
   @persist @observable mendixProjectsPathMac = "";
@@ -84,6 +84,8 @@ export class ProjectsStore {
   }
 
   @action setSortedProjects() {
+    console.log("Entry");
+
     this.setLoading(true);
     setTimeout(() => {
       let sortableUnq: string[] = [""];
@@ -120,7 +122,6 @@ export class ProjectsStore {
         const foundNames: FolderNamesType[] = [];
         rawFiles.forEach((name) => {
           const PROJECT_PATH = `${this.mendixProjectsPathMac}/${name}`;
-          // console.log('PROJECT_PATH', PROJECT_PATH)
           if (!name.startsWith(".")) {
             // hidden Files
             if (fs.lstatSync(PROJECT_PATH).isDirectory()) {
@@ -130,7 +131,6 @@ export class ProjectsStore {
                   const stats = fs.statSync(`${PROJECT_PATH}/${files}`);
                   const nameLenght = name.length;
                   const subName = name.substring(0, nameLenght / 3);
-                  // console.log('name,length', name.length)
                   if (c && name.includes(c)) {
                     return foundNames.push({
                       name,
