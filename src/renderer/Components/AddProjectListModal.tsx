@@ -28,12 +28,15 @@ export const AddProjectListModal: React.FC = observer(({}) => {
   >();
 
   React.useEffect(() => {
-    setMendixAppsPath(projectStore.projectsStore.mendixProjectsPathMac);
+    if (projectStore.projectsStore.mendixProjectsPathMac) {
+      setMendixAppsPath(projectStore.projectsStore.mendixProjectsPathMac);
+    } else {
+      onOpen();
+    }
   }, []);
   const locateGulpFile = (event: any) => {
     if (event.target.files[0]) {
       const pathToGulp = event.target.files[0].path;
-      console.log("pathToGulp", pathToGulp);
     }
   };
   const locateMendixAppsPath = (event: any) => {
