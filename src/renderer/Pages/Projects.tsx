@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState } from 'react'
 import {
   Heading,
   Stack,
@@ -13,96 +13,96 @@ import {
   createStandaloneToast,
   Box,
   useClipboard,
-  Image,
-} from "@chakra-ui/react";
-import { RepeatIcon, CopyIcon } from "@chakra-ui/icons";
-import icon from "../assets/Icon-128.png";
-import { getWindowsIp } from "../utils";
-import { useSocket } from "../utils/socketHelpers";
-import ListOfProjects from "../Components/ListOfProjects";
-import { AddProjectListModal } from "../Components/AddProjectListModal";
-import ReloadProjectsFolder from "../Components/reloadProjectsFolder";
-import { RootStoreContext } from "../stores/RootStore";
-import { observer } from "mobx-react-lite";
+  Image
+} from '@chakra-ui/react'
+import { RepeatIcon, CopyIcon } from '@chakra-ui/icons'
+import icon from '../assets/Icon-128.png'
+import { getWindowsIp } from '../utils'
+import { useSocket } from '../utils/socketHelpers'
+import ListOfProjects from '../Components/ListOfProjects'
+import { AddProjectListModal } from '../Components/AddProjectListModal'
+import ReloadProjectsFolder from '../Components/reloadProjectsFolder'
+import { RootStoreContext } from '../stores/RootStore'
+import { observer } from 'mobx-react-lite'
 
-const { getCurrentWindow } = require("electron").remote;
-const spawn = require("cross-spawn");
+const { getCurrentWindow } = require('electron').remote
+const spawn = require('cross-spawn')
 
-const toast = createStandaloneToast();
+const toast = createStandaloneToast()
 
 const Projects: React.FC = observer(() => {
-  const iPWindows = getWindowsIp().address;
-  const { hasCopied, onCopy } = useClipboard(iPWindows);
+  const iPWindows = getWindowsIp().address
+  const { hasCopied, onCopy } = useClipboard(iPWindows)
   const { sendProjects, openProjectInStudio, resetClients } = useSocket({
-    windowsIp: iPWindows,
-  });
-  const [loading, setLoading] = useState(true);
-  const projectStore = useContext(RootStoreContext);
+    windowsIp: iPWindows
+  })
+  const [loading, setLoading] = useState(true)
+  const projectStore = useContext(RootStoreContext)
   const sendProjectsToServer = () => {
     if (projectStore.projectsStore.projectsSorted) {
-      sendProjects(projectStore.projectsStore.projectsSorted);
-      loading && setLoading(false);
+      sendProjects(projectStore.projectsStore.projectsSorted)
+      loading && setLoading(false)
     }
-  };
+  }
   useEffect(() => {
-    sendProjectsToServer();
+    sendProjectsToServer()
     const interval = setInterval(() => {
-      sendProjectsToServer();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, []);
+      sendProjectsToServer()
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [])
   useEffect(() => {
     if (openProjectInStudio) {
       // @ts-ignore
-      opneThisProjectInStudio(JSON.parse(openProjectInStudio.body));
+      opneThisProjectInStudio(JSON.parse(openProjectInStudio.body))
     }
-  }, [openProjectInStudio]);
+  }, [openProjectInStudio])
 
   const opneThisProjectInStudio = (path: string) => {
     projectStore.projectsStore.openStudioInProject(
       path,
       projectStore.projectsStore.mendixProjectsPathMac
-    );
-  };
+    )
+  }
   const openProjectInVSCodeWindowsBase = (projectName: string) => {
-    const projectPath = `${projectStore.projectsStore.mendixProjectsPathMac}/${projectName}`;
-    const openMX = spawn("code", [projectPath], { stdio: "inherit" });
-    openMX.stderr.on("data", (data: any) => {
+    const projectPath = `${projectStore.projectsStore.mendixProjectsPathMac}/${projectName}`
+    const openMX = spawn('code', [projectPath], { stdio: 'inherit' })
+    openMX.stderr.on('data', (data: any) => {
       toast({
-        status: "error",
-        title: "Error",
+        status: 'error',
+        title: 'Error',
         description: `${data}`,
         duration: 7000,
-        position: "top",
-        isClosable: true,
-      });
-    });
-  };
+        position: 'top',
+        isClosable: true
+      })
+    })
+  }
   const openProjectInVSCodeWindowsStyles = (projectName: string) => {
-    const projectPath = `${projectStore.projectsStore.mendixProjectsPathMac}/${projectName}/theme/styles`;
-    const openMX = spawn("code", [projectPath]);
-    openMX.stderr.on("data", (data: any) => {
+    const projectPath = `${projectStore.projectsStore.mendixProjectsPathMac}/${projectName}/theme/styles`
+    const openMX = spawn('code', [projectPath])
+    openMX.stderr.on('data', (data: any) => {
       toast({
-        status: "error",
-        title: "Error",
+        status: 'error',
+        title: 'Error',
         description: `${data}`,
         duration: 7000,
-        position: "top",
-        isClosable: true,
-      });
-    });
-    openMX.on("close", (code: any) => {
+        position: 'top',
+        isClosable: true
+      })
+    })
+    openMX.on('close', (code: any) => {
       if (!code) {
         toast({
           title: `Opening ${projectName} - Styles`,
-          status: "success",
+          status: 'success',
           duration: 7000,
-          position: "top",
-          isClosable: true,
-        });
+          position: 'top',
+          isClosable: true
+        })
       }
-    });
-  };
+    })
+  }
 
   return (
     <Box p="4">
@@ -117,7 +117,7 @@ const Projects: React.FC = observer(() => {
                   <TagLabel>
                     {projectStore.projectsStore.mendixProjectsPathMac
                       ? projectStore.projectsStore.mendixProjectsPathMac
-                      : "No Apps Folder"}
+                      : 'No Apps Folder'}
                   </TagLabel>
                 </Tag>
               </Text>
@@ -169,7 +169,7 @@ const Projects: React.FC = observer(() => {
         </div>
       )}
     </Box>
-  );
-});
+  )
+})
 
-export default Projects;
+export default Projects

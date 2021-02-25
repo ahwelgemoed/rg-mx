@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
   Heading,
   Button,
@@ -9,64 +9,136 @@ import {
   List,
   Link,
   ListItem,
-  Divider
-} from '@chakra-ui/react'
-import { ExternalLinkIcon } from '@chakra-ui/icons'
+  Divider,
+} from "@chakra-ui/react";
+import fs from "fs";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { dataPath } from "../utils";
 import {
   witchSimulatorIsInstalled,
   startupSimulator,
   listAllAppsOnDevice,
   installMendixApp,
+  downloadMendixApps,
   checkIfBootHasCompleted,
-  openMendixApp
-} from '../utils/androidSimulator'
-const { shell } = require('electron')
+  openMendixApp,
+} from "../utils/androidSimulator";
+const { shell } = require("electron");
+import axios from "axios";
 
 const Simulator = () => {
-  const [listOfSims, setListOfSims] = useState<string[] | null>(null)
+  const [listOfSims, setListOfSims] = useState<string[] | null>(null);
   useEffect(() => {
     (async function anyNameFunction() {
-      await listOfandroidSim()
-    })()
-  }, [])
+      await listOfandroidSim();
+    })();
+  }, []);
 
   const listOfandroidSim = async () => {
-    const witchSim = await witchSimulatorIsInstalled()
-    const rationalList = witchSim.split('\n').filter(Boolean)
-    setListOfSims(rationalList)
-  }
+    const witchSim = await witchSimulatorIsInstalled();
+    const rationalList = witchSim.split("\n").filter(Boolean);
+    setListOfSims(rationalList);
+  };
 
   const startSelectedDevice = async (deviceToBoot: string, version: number) => {
-    const status = await startupSimulator(deviceToBoot)
-    let deviceBooted = false
+    const status = await startupSimulator(deviceToBoot);
+    let deviceBooted = false;
     do {
-      const result = await checkIfBootHasCompleted()
+      const result = await checkIfBootHasCompleted();
       if (result) {
         if (result.status === 0) {
-          deviceBooted = true
+          deviceBooted = true;
         }
       }
-    } while (!deviceBooted)
+    } while (!deviceBooted);
     if (deviceBooted) {
-      const installedAppName = await listAllAppsOnDevice(version)
+      const installedAppName = await listAllAppsOnDevice(version);
       if (installedAppName) {
         // MX INSTALLED
-        installedAppName && (await openMendixApp(installedAppName))
+        installedAppName && (await openMendixApp(installedAppName));
       }
       if (!installedAppName) {
+        await downloadMendixApps(version);
         // MX MUST BE INSTALLED
-        const installedSuccess = await installMendixApp(version)
-        if (installedSuccess && installedSuccess.includes('Success')) {
-          const getNameOfInstalledApp = await listAllAppsOnDevice(version)
-          getNameOfInstalledApp && (await openMendixApp(getNameOfInstalledApp))
-        }
+        const installedSuccess = await installMendixApp(version);
+        // if (installedSuccess && installedSuccess.includes("Success")) {
+        //   const getNameOfInstalledApp = await listAllAppsOnDevice(version);
+        //   getNameOfInstalledApp && (await openMendixApp(getNameOfInstalledApp));
+        // }
       }
     }
-  }
+  };
+  const downer = () => {
+    // axios({
+    //   url: "http://localhost:1233/downloads/mx8",
+    //   method: "GET",
+    //   // responseType: "blob",
+    //   responseType: "arraybuffer",
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    //   // responseType: "blob", // important
+    // }).then(async (response) => {
+    //   console.log("response", response);
+    //   const disposition = response.request.getResponseHeader(
+    //     "Content-Disposition"
+    //   );
+
+    //   var fileName = "";
+    //   var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+    //   var matches = filenameRegex.exec(disposition);
+    //   if (matches != null && matches[1]) {
+    //     fileName = matches[1].replace(/['"]/g, "");
+    //   }
+    //   let blob = new Blob([response.data], { type: "application/zip" });
+    //   const downloadUrl = window.URL.createObjectURL(blob);
+    //   const filePath = `${dataPath}/mx4.zip`;
+    //   var buffer = new Buffer(await blob.arrayBuffer());
+    //   fs.writeFile(filePath, buffer, function (err) {
+    //     if (err) throw err;
+    //   });
+    axios({
+      url:
+        "https://raw.githubusercontent.com/ahwelgemoed/rg-mx/main/data/mx8/1.apk",
+      method: "GET",
+      responseType: "blob",
+      // responseType: "arraybuffer",
+      // headers: {
+      //   "Content-Type": "multipart/form-data",
+      // },
+      // responseType: "blob", // important
+    }).then(async (response) => {
+      console.log("response", response);
+      const disposition = response.request.getResponseHeader(
+        "Content-Disposition"
+      );
+
+      var fileName = "";
+      var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+      var matches = filenameRegex.exec(disposition);
+      if (matches != null && matches[1]) {
+        fileName = matches[1].replace(/['"]/g, "");
+      }
+      let blob = new Blob([response.data], { type: "application/zip" });
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const filePath = `${dataPath}/mx4.apk`;
+      var buffer = new Buffer(await blob.arrayBuffer());
+      fs.writeFile(filePath, buffer, function (err) {
+        if (err) throw err;
+      });
+
+      // let a = document.createElement("a");
+      // a.href = downloadUrl;
+      // a.download = fileName;
+      // document.body.appendChild(a);
+      // a.click();
+    });
+  };
   return (
     <div>
       <Stack mb={4}>
         <Heading>All Installed Android Simulators</Heading>
+        <button onClick={downer}>Clicker</button>
         <Heading as="h6" size="xs">
           Here is a list of all your installed Android Simulators. Clicking on
           the buttons will open the simulator and install the respective Mendix
@@ -77,7 +149,7 @@ const Simulator = () => {
             isExternal
             onClick={() =>
               shell.openExternal(
-                'https://reactnative.dev/docs/environment-setup#installing-dependencies'
+                "https://reactnative.dev/docs/environment-setup#installing-dependencies"
               )
             }
           >
@@ -96,7 +168,7 @@ const Simulator = () => {
               <div key={i * 12}>
                 <Stack direction="row" spacing={6} justify="space-between">
                   <Box mr="2">
-                    <ListItem>{item.replace(/_/g, ' ')}</ListItem>
+                    <ListItem>{item.replace(/_/g, " ")}</ListItem>
                   </Box>
                   <Box>
                     <ButtonGroup size="sm" isAttached>
@@ -122,12 +194,12 @@ const Simulator = () => {
                 <Spacer />
                 <Divider />
               </div>
-            )
+            );
           })}
         </List>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Simulator
+export default Simulator;

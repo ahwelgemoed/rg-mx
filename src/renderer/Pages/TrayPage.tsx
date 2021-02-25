@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from 'react'
 import {
   Tabs,
   TabList,
@@ -14,141 +14,141 @@ import {
   Badge,
   TabPanel,
   Heading,
-  createStandaloneToast,
-} from "@chakra-ui/react";
-import { MdComputer } from "react-icons/md";
-import { MainMessages } from "../../socketMessages";
-import { CloseIcon, RepeatIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { useSocket } from "../utils/socketHelpers";
-import { observer } from "mobx-react-lite";
-import { RootStoreContext } from "../stores/RootStore";
-import ListOfProjects from "../Components/ListOfProjects";
-import { TrayAppSettings } from "../Components/TrayAppSettings";
-import Simulator from "../Components/Simulator";
-import Widgets from "../Components/Widgets";
-import GistBoard from "../Components/GistBoard";
-import icon from "../assets/Icon-128.png";
-import { useHistory } from "react-router-dom";
-import fixPath from "fix-path";
-import { ipcRenderer } from "electron";
-import pF from "os";
+  createStandaloneToast
+} from '@chakra-ui/react'
+import { MdComputer } from 'react-icons/md'
+import { MainMessages } from '../../socketMessages'
+import { CloseIcon, RepeatIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { useSocket } from '../utils/socketHelpers'
+import { observer } from 'mobx-react-lite'
+import { RootStoreContext } from '../stores/RootStore'
+import ListOfProjects from '../Components/ListOfProjects'
+import { TrayAppSettings } from '../Components/TrayAppSettings'
+import Simulator from '../Components/Simulator'
+import Widgets from '../Components/Widgets'
+import GistBoard from '../Components/GistBoard'
+import icon from '../assets/Icon-128.png'
+import { useHistory } from 'react-router-dom'
+import fixPath from 'fix-path'
+import { ipcRenderer } from 'electron'
+import pF from 'os'
 
-const { getCurrentWindow } = require("electron").remote;
-const spawn = require("child_process").spawn;
+const { getCurrentWindow } = require('electron').remote
+const spawn = require('child_process').spawn
 
-const platform = pF.platform();
-const toast = createStandaloneToast();
+const platform = pF.platform()
+const toast = createStandaloneToast()
 const TrayPage = observer(() => {
-  platform === "darwin" && fixPath(); // Super important for MAC Path Fixes
-  const history = useHistory();
-  const mainStore = useContext(RootStoreContext);
+  platform === 'darwin' && fixPath() // Super important for MAC Path Fixes
+  const history = useHistory()
+  const mainStore = useContext(RootStoreContext)
   const {
     isSocketConnected,
     socketProjects,
     resetClients,
     sendOpenStudioInProject,
     sendOpenInCMD,
-    clientOnline,
+    clientOnline
   } = useSocket({
-    windowsIp: mainStore.macStore.windowsIp,
-  });
+    windowsIp: mainStore.macStore.windowsIp
+  })
   useEffect(() => {
-    clientOnline();
-  }, []);
+    clientOnline()
+  }, [])
 
   const openInMacTerminal = (projectName: string) => {
-    const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}`;
-    const openMX = spawn("open", ["-a", "Terminal", projectPath]);
-    openMX.stderr.on("data", (data: any) => {
+    const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}`
+    const openMX = spawn('open', ['-a', 'Terminal', projectPath])
+    openMX.stderr.on('data', (data: any) => {
       toast({
-        status: "error",
-        title: "Error",
+        status: 'error',
+        title: 'Error',
         description: `${data}`,
         duration: 7000,
-        position: "top",
-        isClosable: true,
-      });
-    });
-    openMX.on("close", (code: any) => {
+        position: 'top',
+        isClosable: true
+      })
+    })
+    openMX.on('close', (code: any) => {
       if (!code) {
         toast({
           title: `Opening ${projectName} - Terminal`,
-          status: "success",
+          status: 'success',
           duration: 7000,
-          position: "top",
-          isClosable: true,
-        });
+          position: 'top',
+          isClosable: true
+        })
       }
-    });
-  };
+    })
+  }
   const openProjectInVSCodeMacBase = (projectName: string) => {
-    const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}`;
-    const openMX = spawn("code", [projectPath], { stdio: "inherit" });
-    openMX.stderr.on("data", (data: any) => {
+    const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}`
+    const openMX = spawn('code', [projectPath], { stdio: 'inherit' })
+    openMX.stderr.on('data', (data: any) => {
       toast({
-        status: "error",
-        title: "Error",
+        status: 'error',
+        title: 'Error',
         description: `${data}`,
         duration: 7000,
-        position: "top",
-        isClosable: true,
-      });
-    });
-    openMX.on("close", (code: any) => {
+        position: 'top',
+        isClosable: true
+      })
+    })
+    openMX.on('close', (code: any) => {
       if (!code) {
         toast({
           title: `Opening ${projectName} - Base`,
-          status: "success",
+          status: 'success',
           duration: 7000,
-          position: "top",
-          isClosable: true,
-        });
+          position: 'top',
+          isClosable: true
+        })
       }
-    });
-  };
+    })
+  }
   const openProjectInVSCodeMacStyles = (projectName: string) => {
-    const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}/theme/styles`;
-    const openMX = spawn("code", [projectPath]);
+    const projectPath = `${mainStore.macStore.macProjectsPath}/${projectName}/theme/styles`
+    const openMX = spawn('code', [projectPath])
     // const ls = spawn('ls', ['-lh', '/usr']);
-    openMX.stderr.on("data", (data: any) => {
-      console.log("data", data);
+    openMX.stderr.on('data', (data: any) => {
+      console.log('data', data)
       toast({
-        status: "error",
-        title: "Error",
+        status: 'error',
+        title: 'Error',
         description: `${data}`,
         duration: 7000,
-        position: "top",
-        isClosable: true,
-      });
-    });
-    openMX.on("close", (code: any) => {
+        position: 'top',
+        isClosable: true
+      })
+    })
+    openMX.on('close', (code: any) => {
       if (!code) {
         toast({
           title: `Opening ${projectName} - Styles`,
-          status: "success",
+          status: 'success',
           duration: 7000,
-          position: "top",
-          isClosable: true,
-        });
+          position: 'top',
+          isClosable: true
+        })
       }
-    });
-  };
+    })
+  }
   const startParallelsAndWindows = () => {
-    const openMX = spawn("open", ["-a", "Parallels Desktop"], {
-      stdio: "inherit",
-    });
-    openMX.on("close", (code: any) => {
+    const openMX = spawn('open', ['-a', 'Parallels Desktop'], {
+      stdio: 'inherit'
+    })
+    openMX.on('close', (code: any) => {
       if (!code) {
         toast({
-          title: "Opening Parallels Desktop",
-          status: "success",
+          title: 'Opening Parallels Desktop',
+          status: 'success',
           duration: 7000,
-          position: "top",
-          isClosable: true,
-        });
+          position: 'top',
+          isClosable: true
+        })
       }
-    });
-  };
+    })
+  }
 
   return (
     <Box p="4">
@@ -158,12 +158,12 @@ const TrayPage = observer(() => {
           <Stack direction="column" mb="4">
             <Heading>RG-MX</Heading>
             <Badge
-              colorScheme={isSocketConnected ? "teal" : "red"}
+              colorScheme={isSocketConnected ? 'teal' : 'red'}
               borderRadius="5px"
             >
               {isSocketConnected
-                ? "Windows Is Connected"
-                : "Windows Is Offline"}
+                ? 'Windows Is Connected'
+                : 'Windows Is Offline'}
             </Badge>
           </Stack>
         </Stack>
@@ -236,7 +236,7 @@ const TrayPage = observer(() => {
         </TabPanels>
       </Tabs>
     </Box>
-  );
-});
+  )
+})
 
-export default TrayPage;
+export default TrayPage
