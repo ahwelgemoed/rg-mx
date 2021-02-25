@@ -33,7 +33,7 @@ const toast = createStandaloneToast();
 const Projects: React.FC = observer(() => {
   const iPWindows = getWindowsIp().address;
   const { hasCopied, onCopy } = useClipboard(iPWindows);
-  const { sendProjects, openProjectInStudio } = useSocket({
+  const { sendProjects, openProjectInStudio, resetClients } = useSocket({
     windowsIp: iPWindows,
   });
   const [loading, setLoading] = useState(true);
@@ -139,7 +139,7 @@ const Projects: React.FC = observer(() => {
             colorScheme="yellow"
             size="xs"
             aria-label="reload"
-            onClick={() => getCurrentWindow().reload()}
+            onClick={() => resetClients()}
             icon={<RepeatIcon />}
           />
           <AddProjectListModal />

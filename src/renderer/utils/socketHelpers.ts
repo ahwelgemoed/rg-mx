@@ -4,7 +4,9 @@ import socketIOClient from "socket.io-client";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { RootStoreContext } from "../stores/RootStore";
 import { socketMessage } from "../../socketMessages";
+
 import icon from "../assets/Icon-128.png";
+const { getCurrentWindow } = require("electron").remote;
 const electron = require("electron");
 const spawn = require("child_process").spawn;
 const toast = createStandaloneToast();
@@ -46,6 +48,9 @@ export const useSocket = (props: UseSocketTypes) => {
     });
     socketRef.current.on(socketMessage.CLIENT_ONLINE, (message: any) => {
       sendProjects(projectStore.projectsStore.projectsSorted);
+    });
+    socketRef.current.on(socketMessage.RESET, (message: any) => {
+      getCurrentWindow().reload();
     });
 
     socketRef.current.on(socketMessage.ALL_PROJECTS, (message: any) => {
@@ -148,7 +153,17 @@ export const useSocket = (props: UseSocketTypes) => {
       senderId: socketRef.current.id,
     });
   };
+  const resetClients = () => {
+    socketRef.current.emit(socketMessage.RESET, {
+      body: true,
+      senderId: socketRef.current.id,
+    });
+    setTimeout(() => {
+      getCurrentWindow().reload();
+    }, 1000);
+  };
   return {
+    resetClients,
     clientOnline,
     sendOpenInCMD,
     sendProjects,
