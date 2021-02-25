@@ -9,6 +9,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalFooter,
+  Radio,
+  RadioGroup,
   Divider,
   Heading,
   ModalBody,
@@ -18,18 +20,26 @@ import {
 import { SettingsIcon } from "@chakra-ui/icons";
 import { RootStoreContext } from "../stores/RootStore";
 import { observer } from "mobx-react-lite";
+import { FolderSortEnum } from "../types/projectTypes";
 const platform = require("os").platform();
 const slash = platform === "darwin" ? "/" : "\\";
 export const AddProjectListModal: React.FC = observer(({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [folderSort, setFolderSort] = React.useState<FolderSortEnum>(
+    FolderSortEnum.Smart
+  );
   const projectStore = React.useContext(RootStoreContext);
   const [mendixAppsPath, setMendixAppsPath] = React.useState<
     string | undefined
   >();
-
   React.useEffect(() => {
     if (projectStore.projectsStore.mendixProjectsPathMac) {
       setMendixAppsPath(projectStore.projectsStore.mendixProjectsPathMac);
+      if (projectStore.projectsStore.sortOption) {
+        setFolderSort(projectStore.projectsStore.sortOption);
+      } else {
+        setFolderSort(FolderSortEnum.Smart);
+      }
     } else {
       onOpen();
     }
@@ -48,12 +58,15 @@ export const AddProjectListModal: React.FC = observer(({}) => {
       setMendixAppsPath(joinMendixPath);
     }
   };
-
+  const setAndSave = (e: FolderSortEnum) => {
+    setFolderSort(e);
+    projectStore.projectsStore.setSortPath(e);
+  };
   const acceptAndAddProjects = () => {
     if (mendixAppsPath) {
       // Set Project Path To Mem
       projectStore.projectsStore.setProjectPath(mendixAppsPath);
-      projectStore.projectsStore.setSortedProjects();
+      projectStore.projectsStore.setSortedProjects(folderSort);
       onClose();
     }
   };
@@ -100,6 +113,23 @@ export const AddProjectListModal: React.FC = observer(({}) => {
               </Stack>
 
               <Divider />
+              <Heading size="md">Display Options</Heading>
+              <RadioGroup
+                mb={4}
+                size="sm"
+                colorScheme="teal"
+                // @ts-ignore
+                onChange={setAndSave}
+                value={folderSort}
+              >
+                <Stack direction="row">
+                  <Radio value={FolderSortEnum.Smart}>Smart Collect</Radio>
+                  <Radio isDisabled value={FolderSortEnum.Sub}>
+                    Sub Folder
+                  </Radio>
+                  <Radio value={FolderSortEnum.Plain}>Plain</Radio>
+                </Stack>
+              </RadioGroup>
             </Stack>
           </ModalBody>
           {mendixAppsPath && (

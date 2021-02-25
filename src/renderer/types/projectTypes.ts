@@ -7,3 +7,9 @@ export type FolderNamesType = {
   name: string;
   lastModified: Date;
 };
+
+export enum FolderSortEnum {
+  Smart = "1",
+  Plain = "2",
+  Sub = "3",
+}

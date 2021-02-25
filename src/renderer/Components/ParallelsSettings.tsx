@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 import {
   Stack,
@@ -17,24 +17,24 @@ import {
   useClipboard,
   Icon,
   Flex,
-  Input,
-} from "@chakra-ui/react";
+  Input
+} from '@chakra-ui/react'
 // import messenger from "messenger";
-import spawnAsync from "@expo/spawn-async";
-import { getWindowsIp } from "../utils";
-import { MdComputer } from "react-icons/md";
-import { RootStoreContext } from "../stores/RootStore";
-import { observer } from "mobx-react-lite";
+import spawnAsync from '@expo/spawn-async'
+import { getWindowsIp } from '../utils'
+import { MdComputer } from 'react-icons/md'
+import { RootStoreContext } from '../stores/RootStore'
+import { observer } from 'mobx-react-lite'
 
 export const ParallelsSettings: React.FC = observer(({}) => {
-  const iPWindows = getWindowsIp().address;
-  const { hasCopied, onCopy } = useClipboard(iPWindows);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const projectStore = React.useContext(RootStoreContext);
-  const [allVms, setAllVms] = React.useState<string | undefined>();
+  const iPWindows = getWindowsIp().address
+  const { hasCopied, onCopy } = useClipboard(iPWindows)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const projectStore = React.useContext(RootStoreContext)
+  const [allVms, setAllVms] = React.useState<string | undefined>()
 
   React.useEffect(() => {
-    findAllVMs();
+    findAllVMs()
 
     // here we have 4 servers listening on 4 different ports
     // var server1 = messenger.createListener(8001);
@@ -50,7 +50,7 @@ export const ParallelsSettings: React.FC = observer(({}) => {
     // setInterval(function () {
     //   client.shout("a message came", { some: "data" });
     // }, 1000);
-  }, []);
+  }, [])
 
   const findAllVMs = async () => {
     // const ffmpeg$ = spawnAsync("prlctl", ["list", "-a"]);
@@ -61,9 +61,9 @@ export const ParallelsSettings: React.FC = observer(({}) => {
     // });
     // const result = await ffmpeg$;
     // setAllVms(result.output[0]);
-  };
-  console.log("allVms", allVms && allVms.split(/(\r\n|\n|\r)/gm));
-  console.log("allVms", allVms && allVms.split("\n")[1].replace(/\s/g, ""));
+  }
+  console.log('allVms', allVms && allVms.split(/(\r\n|\n|\r)/gm))
+  console.log('allVms', allVms && allVms.split('\n')[1].replace(/\s/g, ''))
   return (
     <>
       <Button mr="-px" onClick={onOpen}>
@@ -91,7 +91,7 @@ export const ParallelsSettings: React.FC = observer(({}) => {
                   placeholder="Welcome"
                 />
                 <Button onClick={onCopy}>
-                  {hasCopied ? "Copied" : "Copy"}
+                  {hasCopied ? 'Copied' : 'Copy'}
                 </Button>
               </Flex>
             </Stack>
@@ -103,5 +103,5 @@ export const ParallelsSettings: React.FC = observer(({}) => {
         </ModalContent>
       </Modal>
     </>
-  );
-});
+  )
+})

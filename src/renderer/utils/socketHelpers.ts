@@ -4,9 +4,9 @@ import socketIOClient from "socket.io-client";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { RootStoreContext } from "../stores/RootStore";
 import { socketMessage } from "../../socketMessages";
-const electron = require("electron");
 import icon from "../assets/Icon-128.png";
-
+const electron = require("electron");
+const spawn = require("child_process").spawn;
 const toast = createStandaloneToast();
 
 type UseSocketTypes = {
@@ -38,23 +38,17 @@ export const useSocket = (props: UseSocketTypes) => {
     socketRef.current = socketIOClient(SOCKET_SERVER_URL);
 
     socketRef.current.on("connect", () => {});
-    socketRef.current.on("close", (Arno: any) => console.log("Arno", Arno));
 
     socketRef.current.on("disconnect", () => {
       setIsSocketConnected(false);
       tryReconnect();
       console.log("Disconnected");
     });
+    socketRef.current.on(socketMessage.CLIENT_ONLINE, (message: any) => {
+      sendProjects(projectStore.projectsStore.projectsSorted);
+    });
 
-    // socketRef.current.on(socketMessage.NEW_CLIENT, () => {
-    //   if (projectStore.projectsStore.projectsSorted) {
-    //     socketRef.current.compress(false).emit(socketMessage.ALL_PROJECTS, {
-    //       messageBody: stringMyBody(projectStore.projectsStore.projectsSorted),
-    //     });
-    //   }
-    // });
     socketRef.current.on(socketMessage.ALL_PROJECTS, (message: any) => {
-      console.log("message", message);
       setSocketProjects(message);
     });
     socketRef.current.on(socketMessage.OPEN_IN_STUDIO, (message: any) => {
@@ -113,6 +107,12 @@ export const useSocket = (props: UseSocketTypes) => {
       messageBody: stringMyBody(messageBody),
     });
   };
+  const clientOnline = () => {
+    socketRef.current.emit(socketMessage.CLIENT_ONLINE, {
+      body: true,
+      senderId: socketRef.current.id,
+    });
+  };
   const sendOpenStudioInProject = (messageBody: any) => {
     socketRef.current.emit(socketMessage.OPEN_IN_STUDIO, {
       body: stringMyBody(messageBody),
@@ -124,6 +124,9 @@ export const useSocket = (props: UseSocketTypes) => {
       duration: 7000,
       position: "top",
       isClosable: true,
+    });
+    spawn("open", ["-a", "Parallels Desktop"], {
+      stdio: "inherit",
     });
   };
   const sendOpenInCMD = (messageBody: any) => {
@@ -146,13 +149,14 @@ export const useSocket = (props: UseSocketTypes) => {
     });
   };
   return {
-    isSocketConnected,
-    sendOpenInVsCode,
+    clientOnline,
     sendOpenInCMD,
     sendProjects,
-    sendOpenStudioInProject,
     socketProjects,
+    sendOpenInVsCode,
+    isSocketConnected,
     openProjectInStudio,
+    sendOpenStudioInProject,
   };
 };
 const stringMyBody = (body: any) => {

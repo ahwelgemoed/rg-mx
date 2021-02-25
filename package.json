@@ -1,11 +1,12 @@
 {
   "name": "rg-mx",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "ahwelgemoed",
   "description": "An electron-react project",
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
+    "docs": "docsify serve docs",
     "build": "node .electron-react/build.js && electron-builder -wm",
     "build:dir": "node .electron-react/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-react/build.js",
@@ -22,7 +23,7 @@
     "test:e2e": "yarn run pack && jest -c jest.e2e.config.js"
   },
   "build": {
-    "productName": "rg-mx",
+    "productName": "RG-MX",
     "extends": null,
     "appId": "com.rg-mx.arno",
     "directories": {

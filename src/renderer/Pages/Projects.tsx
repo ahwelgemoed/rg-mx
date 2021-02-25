@@ -15,10 +15,8 @@ import {
   useClipboard,
   Image,
 } from "@chakra-ui/react";
-const { getCurrentWindow } = require("electron").remote;
-import { RepeatIcon } from "@chakra-ui/icons";
+import { RepeatIcon, CopyIcon } from "@chakra-ui/icons";
 import icon from "../assets/Icon-128.png";
-const spawn = require("cross-spawn");
 import { getWindowsIp } from "../utils";
 import { useSocket } from "../utils/socketHelpers";
 import ListOfProjects from "../Components/ListOfProjects";
@@ -26,8 +24,12 @@ import { AddProjectListModal } from "../Components/AddProjectListModal";
 import ReloadProjectsFolder from "../Components/reloadProjectsFolder";
 import { RootStoreContext } from "../stores/RootStore";
 import { observer } from "mobx-react-lite";
-import { CopyIcon } from "@chakra-ui/icons";
+
+const { getCurrentWindow } = require("electron").remote;
+const spawn = require("cross-spawn");
+
 const toast = createStandaloneToast();
+
 const Projects: React.FC = observer(() => {
   const iPWindows = getWindowsIp().address;
   const { hasCopied, onCopy } = useClipboard(iPWindows);
@@ -150,19 +152,21 @@ const Projects: React.FC = observer(() => {
           <Skeleton height="20px" mb="4" />
         </>
       ) : (
-        <ListOfProjects
-          projectsSorted={projectStore.projectsStore.projectsSorted}
-          openStudioInProject={opneThisProjectInStudio}
-          openInVsCode={projectStore.projectsStore.openInVsCode}
-          openInVsCodeBase={openProjectInVSCodeWindowsBase}
-          openInVsCodeStyles={openProjectInVSCodeWindowsStyles}
-          openInWindowsTerminal={(x: any) =>
-            projectStore.projectsStore.openProjectInCMD(
-              x,
-              projectStore.projectsStore.mendixProjectsPathMac
-            )
-          }
-        />
+        <div>
+          <ListOfProjects
+            projectsSorted={projectStore.projectsStore.projectsSorted}
+            openStudioInProject={opneThisProjectInStudio}
+            openInVsCode={projectStore.projectsStore.openInVsCode}
+            openInVsCodeBase={openProjectInVSCodeWindowsBase}
+            openInVsCodeStyles={openProjectInVSCodeWindowsStyles}
+            openInWindowsTerminal={(x: any) =>
+              projectStore.projectsStore.openProjectInCMD(
+                x,
+                projectStore.projectsStore.mendixProjectsPathMac
+              )
+            }
+          />
+        </div>
       )}
     </Box>
   );

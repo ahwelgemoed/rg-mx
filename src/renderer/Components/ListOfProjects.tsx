@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
-  Heading,
   Button,
   Box,
   Table,
@@ -18,10 +17,10 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
-const platform = require("os").platform();
 import { observer } from "mobx-react-lite";
 import { FolderNamesType, ProjectType } from "../types/projectTypes";
 import { format } from "date-fns";
+const platform = require("os").platform();
 
 const ListOfProjects = observer(
   ({
@@ -59,7 +58,7 @@ const ListOfProjects = observer(
                   <Box>
                     <ListItem>
                       <Badge mr="2" borderRadius="4px">
-                        {item.folderNames.length}
+                        {item.folderNames ? item.folderNames.length : ""}
                       </Badge>
                       {item.name}
                     </ListItem>
@@ -103,22 +102,98 @@ const ListOfProjects = observer(
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {item.folderNames.map((fileNames, keyA) => (
-                        <Tr key={keyA * 9911}>
-                          <Td>{fileNames.name}</Td>
+                      {item.folderNames ? (
+                        item.folderNames.map((fileNames, keyA) => (
+                          <Tr key={keyA * 9911}>
+                            <Td>{fileNames.name}</Td>
+                            <Td>
+                              {format(
+                                new Date(fileNames.lastModified),
+                                "dd/MM/yyyy"
+                              )}
+                            </Td>
+                            <Td>
+                              <Button
+                                colorScheme="teal"
+                                size="xs"
+                                onClick={() =>
+                                  openStudioInProject(fileNames.name)
+                                }
+                              >
+                                Open Studio
+                              </Button>
+                            </Td>
+                            <Td>
+                              <ButtonGroup
+                                size="sm"
+                                isAttached
+                                variant="outline"
+                              >
+                                <Button
+                                  colorScheme="teal"
+                                  size="xs"
+                                  variant="outline"
+                                  onClick={() =>
+                                    openInVsCodeBase(fileNames.name)
+                                  }
+                                >
+                                  Base
+                                </Button>
+                                <Button
+                                  colorScheme="teal"
+                                  size="xs"
+                                  variant="outline"
+                                  onClick={() =>
+                                    openInVsCodeStyles(fileNames.name)
+                                  }
+                                >
+                                  Styles
+                                </Button>
+                              </ButtonGroup>
+                            </Td>
+                            <Td>
+                              <ButtonGroup
+                                size="sm"
+                                isAttached
+                                variant="outline"
+                              >
+                                {platform === "darwin" && (
+                                  <Button
+                                    colorScheme="teal"
+                                    size="xs"
+                                    variant="outline"
+                                    onClick={() =>
+                                      openInMacTerminal(fileNames.name)
+                                    }
+                                  >
+                                    Terminal
+                                  </Button>
+                                )}
+                                <Button
+                                  colorScheme="teal"
+                                  size="xs"
+                                  variant="outline"
+                                  onClick={() =>
+                                    openInWindowsTerminal(fileNames.name)
+                                  }
+                                >
+                                  CMD
+                                </Button>
+                              </ButtonGroup>
+                            </Td>
+                          </Tr>
+                        ))
+                      ) : (
+                        <Tr>
+                          <Td>{item.name}</Td>
                           <Td>
-                            {format(
-                              new Date(fileNames.lastModified),
-                              "dd/MM/yyyy"
-                            )}
+                            {format(new Date(item.lastModified), "dd/MM/yyyy")}
                           </Td>
                           <Td>
                             <Button
                               colorScheme="teal"
                               size="xs"
-                              onClick={() =>
-                                openStudioInProject(fileNames.name)
-                              }
+                              onClick={() => openStudioInProject(item.name)}
                             >
                               Open Studio
                             </Button>
@@ -137,9 +212,7 @@ const ListOfProjects = observer(
                                 colorScheme="teal"
                                 size="xs"
                                 variant="outline"
-                                onClick={() =>
-                                  openInVsCodeStyles(fileNames.name)
-                                }
+                                onClick={() => openInVsCodeStyles(item.name)}
                               >
                                 Styles
                               </Button>
@@ -152,9 +225,7 @@ const ListOfProjects = observer(
                                   colorScheme="teal"
                                   size="xs"
                                   variant="outline"
-                                  onClick={() =>
-                                    openInMacTerminal(fileNames.name)
-                                  }
+                                  onClick={() => openInMacTerminal(item.name)}
                                 >
                                   Terminal
                                 </Button>
@@ -163,16 +234,14 @@ const ListOfProjects = observer(
                                 colorScheme="teal"
                                 size="xs"
                                 variant="outline"
-                                onClick={() =>
-                                  openInWindowsTerminal(fileNames.name)
-                                }
+                                onClick={() => openInWindowsTerminal(item.name)}
                               >
                                 CMD
                               </Button>
                             </ButtonGroup>
                           </Td>
                         </Tr>
-                      ))}
+                      )}
                     </Tbody>
                   </Table>
                 )}

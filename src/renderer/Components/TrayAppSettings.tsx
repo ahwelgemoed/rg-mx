@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Stack,
   Button,
@@ -15,96 +15,96 @@ import {
   Heading,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { SettingsIcon } from "@chakra-ui/icons";
-import { RootStoreContext } from "../stores/RootStore";
-import { observer } from "mobx-react-lite";
-import { slash } from "../utils";
-const { getCurrentWindow } = require("electron").remote;
+  useDisclosure
+} from '@chakra-ui/react'
+import { SettingsIcon } from '@chakra-ui/icons'
+import { RootStoreContext } from '../stores/RootStore'
+import { observer } from 'mobx-react-lite'
+import { slash } from '../utils'
+const { getCurrentWindow } = require('electron').remote
 export const TrayAppSettings: React.FC = observer(({}) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [windowsIP, setWindowsIP] = useState<string>("");
-  const [githubUserName, setGithubUserName] = useState<string>("");
-  const mainStore = React.useContext(RootStoreContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [windowsIP, setWindowsIP] = useState<string>('')
+  const [githubUserName, setGithubUserName] = useState<string>('')
+  const mainStore = React.useContext(RootStoreContext)
   const [mendixAppsPath, setMendixAppsPath] = React.useState<
     string | undefined
-  >();
+  >()
   const [mendixWidgetsAppsPath, setMendixWidgetsAppsPath] = React.useState<
     string | undefined
-  >("");
+  >('')
 
   React.useEffect(() => {
     if (!mainStore.macStore.windowsIp || !mainStore.macStore.macProjectsPath) {
-      onOpen();
+      onOpen()
     }
 
-    setWindowsIP(mainStore.macStore.windowsIp);
-    setGithubUserName(mainStore.macStore.githubUsername);
-    setMendixAppsPath(mainStore.macStore.macProjectsPath);
-    setMendixWidgetsAppsPath(mainStore.macStore.macWidgetsPath);
-  }, []);
+    setWindowsIP(mainStore.macStore.windowsIp)
+    setGithubUserName(mainStore.macStore.githubUsername)
+    setMendixAppsPath(mainStore.macStore.macProjectsPath)
+    setMendixWidgetsAppsPath(mainStore.macStore.macWidgetsPath)
+  }, [])
   const handleChange = (e: any) => {
-    setWindowsIP(e.target.value);
-  };
+    setWindowsIP(e.target.value)
+  }
   const handleGithubChange = (e: any) => {
-    setGithubUserName(e.target.value);
-  };
+    setGithubUserName(e.target.value)
+  }
 
   const locateMendixAppsPath = (event: any) => {
     if (event.target.files[0]) {
-      const pathToThisMendixProject = event.target.files[0].path;
-      const split = pathToThisMendixProject.split(slash);
-      split.splice(split.length - 2, 2);
-      const joinMendixPath = split.join(slash);
-      setMendixAppsPath(joinMendixPath);
+      const pathToThisMendixProject = event.target.files[0].path
+      const split = pathToThisMendixProject.split(slash)
+      split.splice(split.length - 2, 2)
+      const joinMendixPath = split.join(slash)
+      setMendixAppsPath(joinMendixPath)
     }
-  };
+  }
   const locateWidgetsAppsPath = (event: any) => {
     if (event.target.files[0]) {
-      const pathToThisMendixProject = event.target.files[0].path;
-      const split = pathToThisMendixProject.split(slash);
-      console.log("split", split);
-      split.splice(split.length - 2, 2);
-      const joinMendixPath = split.join(slash);
-      setMendixWidgetsAppsPath(joinMendixPath);
-      console.log("joinMendixPath", joinMendixPath);
+      const pathToThisMendixProject = event.target.files[0].path
+      const split = pathToThisMendixProject.split(slash)
+      console.log('split', split)
+      split.splice(split.length - 2, 2)
+      const joinMendixPath = split.join(slash)
+      setMendixWidgetsAppsPath(joinMendixPath)
+      console.log('joinMendixPath', joinMendixPath)
     }
-  };
+  }
   const acceptAndAddProjects = () => {
     if (mendixAppsPath && windowsIP) {
-      setIsLoading(true);
-      mainStore.macStore.setWindowsIp(windowsIP);
-      mainStore.macStore.setMacProjectsPath(mendixAppsPath);
-      githubUserName && mainStore.macStore.setGithubName(githubUserName);
+      setIsLoading(true)
+      mainStore.macStore.setWindowsIp(windowsIP)
+      mainStore.macStore.setMacProjectsPath(mendixAppsPath)
+      githubUserName && mainStore.macStore.setGithubName(githubUserName)
       mendixWidgetsAppsPath &&
-        mainStore.macStore.setMacWidgetsPath(mendixWidgetsAppsPath as string);
+        mainStore.macStore.setMacWidgetsPath(mendixWidgetsAppsPath as string)
       setTimeout(() => {
-        getCurrentWindow().reload();
-        onClose();
-      }, 2500);
+        getCurrentWindow().reload()
+        onClose()
+      }, 2500)
     }
-  };
+  }
   const displayMendixPath = () => {
     if (mendixAppsPath) {
       return (
         <>
           <Tag>{mendixAppsPath}</Tag>
         </>
-      );
+      )
     }
-  };
+  }
   const displayWidgetsPath = () => {
     if (mendixWidgetsAppsPath) {
       return (
         <>
           <Tag>{mendixWidgetsAppsPath}</Tag>
         </>
-      );
+      )
     }
-  };
+  }
   return (
     <>
       <IconButton
@@ -185,7 +185,7 @@ export const TrayAppSettings: React.FC = observer(({}) => {
               <Heading size="sm">
                 <Badge colorScheme="teal" mr="2">
                   Optional
-                </Badge>{" "}
+                </Badge>{' '}
                 Github Username
               </Heading>
               <Input
@@ -212,5 +212,5 @@ export const TrayAppSettings: React.FC = observer(({}) => {
         </ModalContent>
       </Modal>
     </>
-  );
-});
+  )
+})

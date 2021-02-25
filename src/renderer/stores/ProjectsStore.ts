@@ -5,7 +5,11 @@ import { persist } from "mobx-persist";
 import fs from "fs";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { slash, dataPath } from "../utils";
-import { FolderNamesType, ProjectType } from "../types/projectTypes";
+import {
+  FolderNamesType,
+  ProjectType,
+  FolderSortEnum,
+} from "../types/projectTypes";
 const platform = require("os").platform();
 const { exec } = require("child_process");
 const spawn = require("cross-spawn");
@@ -15,10 +19,12 @@ const PROJECTS_SORTED = "projects_Sorted";
 const PROJECTS_PATH_MAC = "projectsStore";
 const PROJECTS_PATH_Win = "projectsStoreWin";
 const GULP_SORTED = "gulpPath";
+const SORT_OPTION = "sortOption";
 
 export class ProjectsStore {
   rootStore: RootStore;
   store: any;
+  sortOption: FolderSortEnum;
   constructor(rootStore: RootStore, store: any) {
     makeObservable(this);
     this.store = store;
@@ -28,6 +34,7 @@ export class ProjectsStore {
     // this. = this.store.get("projectsStore");
     this.gulpPath = this.store.get(GULP_SORTED);
     this.projectsSorted = this.store.get(PROJECTS_SORTED);
+    this.sortOption = this.store.get(SORT_OPTION);
   }
 
   checkForMPR = (name: string): boolean => {
@@ -36,10 +43,16 @@ export class ProjectsStore {
 
   @persist @observable mendixProjectsPathMac = "";
   @persist @observable mendixProjectsPathWin = "";
+  @persist @observable sortOption = FolderSortEnum.Smart;
   @persist @observable gulpPath = "";
   @observable projectLoading = false;
   @persist projectsSorted: ProjectType[] = [];
   isDarwin = platform === "darwin";
+
+  @action setSortPath(option: FolderSortEnum) {
+    this.sortOption = option;
+    this.store.set(SORT_OPTION, this.sortOption);
+  }
 
   @action setGulpPath(stringPath: string) {
     this.gulpPath = stringPath;
@@ -82,10 +95,54 @@ export class ProjectsStore {
     const weight = equivalency / maxLength;
     return weight * 100;
   }
+  setPlainFolders() {
+    this.setLoading(true);
+    setTimeout(() => {
+      const foundNames: FolderNamesType[] = [];
+      console.log("folderSort");
+      const rawFiles = fs.readdirSync(this.mendixProjectsPathMac);
+      rawFiles.forEach((file) => {
+        const PROJECT_PATH = `${this.mendixProjectsPathMac}/${file}`;
+        // If Directory
+        if (fs.lstatSync(PROJECT_PATH).isDirectory()) {
+          const branshFiels = fs.readdirSync(PROJECT_PATH);
+          branshFiels.map((files) => {
+            if (this.checkForMPR(files)) {
+              const stats = fs.statSync(`${PROJECT_PATH}/${files}`);
+              return foundNames.push({
+                name: file,
+                lastModified: stats.mtime,
+              });
+            }
+          });
+        }
+      });
+      const dateSortedList: ProjectType[] = [];
+      (foundNames as ProjectType[]).sort(function (
+        a: FolderNamesType,
+        b: FolderNamesType
+      ) {
+        return (
+          new Date(b.lastModified).getTime() -
+          new Date(a.lastModified).getTime()
+        );
+      });
 
-  @action setSortedProjects() {
-    console.log("Entry");
-
+      // Turn your strings into dates, and then subtract them
+      // to get a value that is either negative, positive, or zero.
+      this.projectsSorted = foundNames as ProjectType[];
+      this.store.set(PROJECTS_SORTED, this.projectsSorted);
+      toast({
+        title: `${foundNames.length} Projects added`,
+        status: "success",
+        duration: 7000,
+        position: "top",
+        isClosable: true,
+      });
+    }, 100);
+    this.setLoading(false);
+  }
+  private setSmartFolders() {
     this.setLoading(true);
     setTimeout(() => {
       let sortableUnq: string[] = [""];
@@ -107,7 +164,7 @@ export class ProjectsStore {
           const branshFiels = fs.readdirSync(PROJECT_PATH);
           branshFiels.map((files) => {
             if (this.checkForMPR(files)) {
-              const splitNameArray = file.split(" ");
+              const splitNameArray = file.split("-");
               sortableUnq.push(splitNameArray[0]);
             }
           });
@@ -130,7 +187,10 @@ export class ProjectsStore {
                 if (this.checkForMPR(files)) {
                   const stats = fs.statSync(`${PROJECT_PATH}/${files}`);
                   const nameLenght = name.length;
-                  const subName = name.substring(0, nameLenght / 3);
+                  const subName = name.substring(0, nameLenght / 2);
+                  1;
+                  console.log("c", c);
+                  console.log("name", name);
                   if (c && name.includes(c)) {
                     return foundNames.push({
                       name,
@@ -174,10 +234,16 @@ export class ProjectsStore {
       this.setLoading(false);
     }, 100);
   }
+  @action setSortedProjects(folderSort: FolderSortEnum) {
+    if (folderSort === FolderSortEnum.Plain) {
+      return this.setPlainFolders();
+    }
+    if (folderSort === FolderSortEnum.Smart) {
+      return this.setSmartFolders();
+    }
+  }
 
   @action openStudioInProject(projectName: string, studioPath: string) {
-    // console.log('{this.mendixProjectsPathMac', this.mendixProjectsPathMac)
-    // console.log('projectName', projectName,studioPath)
     const buildString = `${studioPath}${slash}${projectName}`;
     // const buildString = `${studioPath}${slash}${projectName}`
     const branshFiels = fs.readdirSync(buildString);
@@ -188,12 +254,8 @@ export class ProjectsStore {
       }
     });
     const fileStringToOpen = `${buildString}${slash}${fileToOpen}`;
-    console.log("fileStringToOpen", fileStringToOpen);
-    // const ls = spawn('open', [fileStringToOpen])
     const openMX = spawn("start", ["", fileStringToOpen]);
-    // const ls = spawn('ls', ['-lh', '/usr']);
     openMX.stderr.on("data", (data: any) => {
-      console.log("data", data);
       toast({
         status: "error",
         title: "Error",
