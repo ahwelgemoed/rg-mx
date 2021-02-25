@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   Button,
   Box,
@@ -14,13 +14,13 @@ import {
   Flex,
   List,
   ListItem,
-  Divider
-} from '@chakra-ui/react'
-import { ChevronRightIcon, ChevronDownIcon } from '@chakra-ui/icons'
-import { observer } from 'mobx-react-lite'
-import { FolderNamesType, ProjectType } from '../types/projectTypes'
-import { format } from 'date-fns'
-const platform = require('os').platform()
+  Divider,
+} from "@chakra-ui/react";
+import { ChevronRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { observer } from "mobx-react-lite";
+import { FolderNamesType, ProjectType } from "../types/projectTypes";
+import { format } from "date-fns";
+const platform = require("os").platform();
 
 const ListOfProjects = observer(
   ({
@@ -29,10 +29,10 @@ const ListOfProjects = observer(
     openInVsCodeBase,
     openInVsCodeStyles,
     openInMacTerminal,
-    openInWindowsTerminal
+    openInWindowsTerminal,
   }: any) => {
-    const [projectsState, setProjectsState] = useState<ProjectType[]>([])
-    const [openState, setopenState] = useState<number | undefined>()
+    const [projectsState, setProjectsState] = useState<ProjectType[]>([]);
+    const [openState, setopenState] = useState<number | undefined>();
 
     React.useEffect(() => {
       if (projectsSorted && projectsSorted.length) {
@@ -43,11 +43,11 @@ const ListOfProjects = observer(
           return (
             new Date(b.lastModified).getTime() -
             new Date(a.lastModified).getTime()
-          )
-        })
-        setProjectsState(x)
+          );
+        });
+        setProjectsState(x);
       }
-    }, [projectsSorted])
+    }, [projectsSorted]);
     return (
       <>
         <List spacing={3}>
@@ -58,14 +58,14 @@ const ListOfProjects = observer(
                   <Box>
                     <ListItem>
                       <Badge mr="2" borderRadius="4px">
-                        {item.folderNames ? item.folderNames.length : ''}
+                        {item.folderNames ? item.folderNames.length : ""}
                       </Badge>
                       {item.name}
                     </ListItem>
                   </Box>
                   <Spacer />
                   <Box mr="4" color="teal.700">
-                    {format(new Date(item.lastModified), 'dd/MM/yyyy')}
+                    {format(new Date(item.lastModified), "dd/MM/yyyy")}
                   </Box>
                   <Box>
                     <Button
@@ -109,7 +109,7 @@ const ListOfProjects = observer(
                             <Td>
                               {format(
                                 new Date(fileNames.lastModified),
-                                'dd/MM/yyyy'
+                                "dd/MM/yyyy"
                               )}
                             </Td>
                             <Td>
@@ -157,7 +157,7 @@ const ListOfProjects = observer(
                                 isAttached
                                 variant="outline"
                               >
-                                {platform === 'darwin' && (
+                                {platform === "darwin" && (
                                   <Button
                                     colorScheme="teal"
                                     size="xs"
@@ -187,7 +187,7 @@ const ListOfProjects = observer(
                         <Tr>
                           <Td>{item.name}</Td>
                           <Td>
-                            {format(new Date(item.lastModified), 'dd/MM/yyyy')}
+                            {format(new Date(item.lastModified), "dd/MM/yyyy")}
                           </Td>
                           <Td>
                             <Button
@@ -204,7 +204,7 @@ const ListOfProjects = observer(
                                 colorScheme="teal"
                                 size="xs"
                                 variant="outline"
-                                onClick={() => openInVsCodeBase(fileNames.name)}
+                                onClick={() => openInVsCodeBase(item.name)}
                               >
                                 Base
                               </Button>
@@ -220,7 +220,7 @@ const ListOfProjects = observer(
                           </Td>
                           <Td>
                             <ButtonGroup size="sm" isAttached variant="outline">
-                              {platform === 'darwin' && (
+                              {platform === "darwin" && (
                                 <Button
                                   colorScheme="teal"
                                   size="xs"
@@ -246,12 +246,12 @@ const ListOfProjects = observer(
                   </Table>
                 )}
               </div>
-            )
+            );
           })}
         </List>
       </>
-    )
+    );
   }
-)
+);
 
-export default ListOfProjects
+export default ListOfProjects;

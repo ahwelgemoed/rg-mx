@@ -60,85 +60,22 @@ const Simulator = () => {
       if (!installedAppName) {
         await downloadMendixApps(version);
         // MX MUST BE INSTALLED
-        const installedSuccess = await installMendixApp(version);
-        // if (installedSuccess && installedSuccess.includes("Success")) {
-        //   const getNameOfInstalledApp = await listAllAppsOnDevice(version);
-        //   getNameOfInstalledApp && (await openMendixApp(getNameOfInstalledApp));
-        // }
+        await setTimeout(async () => {
+          const installedSuccess = await installMendixApp(version);
+          if (installedSuccess && installedSuccess.includes("Success")) {
+            const getNameOfInstalledApp = await listAllAppsOnDevice(version);
+            getNameOfInstalledApp &&
+              (await openMendixApp(getNameOfInstalledApp));
+          }
+        }, 5000);
       }
     }
   };
-  const downer = () => {
-    // axios({
-    //   url: "http://localhost:1233/downloads/mx8",
-    //   method: "GET",
-    //   // responseType: "blob",
-    //   responseType: "arraybuffer",
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    //   // responseType: "blob", // important
-    // }).then(async (response) => {
-    //   console.log("response", response);
-    //   const disposition = response.request.getResponseHeader(
-    //     "Content-Disposition"
-    //   );
 
-    //   var fileName = "";
-    //   var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-    //   var matches = filenameRegex.exec(disposition);
-    //   if (matches != null && matches[1]) {
-    //     fileName = matches[1].replace(/['"]/g, "");
-    //   }
-    //   let blob = new Blob([response.data], { type: "application/zip" });
-    //   const downloadUrl = window.URL.createObjectURL(blob);
-    //   const filePath = `${dataPath}/mx4.zip`;
-    //   var buffer = new Buffer(await blob.arrayBuffer());
-    //   fs.writeFile(filePath, buffer, function (err) {
-    //     if (err) throw err;
-    //   });
-    axios({
-      url:
-        "https://raw.githubusercontent.com/ahwelgemoed/rg-mx/main/data/mx8/1.apk",
-      method: "GET",
-      responseType: "blob",
-      // responseType: "arraybuffer",
-      // headers: {
-      //   "Content-Type": "multipart/form-data",
-      // },
-      // responseType: "blob", // important
-    }).then(async (response) => {
-      console.log("response", response);
-      const disposition = response.request.getResponseHeader(
-        "Content-Disposition"
-      );
-
-      var fileName = "";
-      var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-      var matches = filenameRegex.exec(disposition);
-      if (matches != null && matches[1]) {
-        fileName = matches[1].replace(/['"]/g, "");
-      }
-      let blob = new Blob([response.data], { type: "application/zip" });
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const filePath = `${dataPath}/mx4.apk`;
-      var buffer = new Buffer(await blob.arrayBuffer());
-      fs.writeFile(filePath, buffer, function (err) {
-        if (err) throw err;
-      });
-
-      // let a = document.createElement("a");
-      // a.href = downloadUrl;
-      // a.download = fileName;
-      // document.body.appendChild(a);
-      // a.click();
-    });
-  };
   return (
     <div>
       <Stack mb={4}>
         <Heading>All Installed Android Simulators</Heading>
-        <button onClick={downer}>Clicker</button>
         <Heading as="h6" size="xs">
           Here is a list of all your installed Android Simulators. Clicking on
           the buttons will open the simulator and install the respective Mendix

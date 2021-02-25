@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   Flex,
   Spacer,
@@ -7,21 +7,21 @@ import {
   Text,
   Button,
   Divider,
-  IconButton
-} from '@chakra-ui/react'
-import { RepeatClockIcon, SearchIcon } from '@chakra-ui/icons'
-import { RootStoreContext } from '../stores/RootStore'
+  IconButton,
+} from "@chakra-ui/react";
+import { RepeatClockIcon, SearchIcon } from "@chakra-ui/icons";
+import { RootStoreContext } from "../stores/RootStore";
 
-import { observer } from 'mobx-react-lite'
+import { observer } from "mobx-react-lite";
 
 const Sidebar = observer(() => {
-  const projectStore = React.useContext(RootStoreContext)
+  const projectStore = React.useContext(RootStoreContext);
 
   return (
     <Flex justify="space-between" direction="column" h="100%">
       <Box>
         <nav>
-          <Link style={{ textAlign: 'left' }} to="/Projects">
+          <Link style={{ textAlign: "left" }} to="/Projects">
             <Text fontSize="lg" color="teal" pb="4">
               <IconButton
                 mr="8"
@@ -32,7 +32,7 @@ const Sidebar = observer(() => {
             </Text>
           </Link>
 
-          <Link style={{ textAlign: 'left' }} to="/tray">
+          <Link style={{ textAlign: "left" }} to="/tray">
             <Text fontSize="lg" color="teal" pb="4">
               <IconButton
                 mr="8"
@@ -48,7 +48,7 @@ const Sidebar = observer(() => {
       </Box>
       <Spacer />
       <Box>
-        <Button
+        {/* <Button
           mr="-px"
           w="100%"
           colorScheme={
@@ -59,10 +59,10 @@ const Sidebar = observer(() => {
         >
           <RepeatClockIcon size="xs" mr="2" />
           Sync Projects
-        </Button>
+        </Button> */}
       </Box>
     </Flex>
-  )
-})
+  );
+});
 
-export default Sidebar
+export default Sidebar;

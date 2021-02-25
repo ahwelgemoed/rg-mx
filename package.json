@@ -1,6 +1,6 @@
 {
   "name": "rg-mx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "ahwelgemoed",
   "description": "An electron-react project",
   "license": "MIT",
@@ -72,12 +72,15 @@
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
     "@expo/spawn-async": "^1.5.0",
+    "@types/adm-zip": "^0.4.33",
     "@types/axios": "^0.14.0",
     "@types/cross-spawn": "^6.0.2",
     "@types/messenger": "^1.4.28",
     "@types/react-icons": "^3.0.0",
     "@types/react-router-dom": "^5.1.7",
     "@types/socket.io-client": "^1.4.35",
+    "@types/unzipper": "^0.10.3",
+    "adm-zip": "^0.5.3",
     "axios": "^0.21.1",
     "cross-spawn": "^7.0.3",
     "date-fns": "^2.16.1",
@@ -98,6 +101,7 @@
     "react-use-websocket": "^2.4.0",
     "socket.io": "^3.1.0",
     "socket.io-client": "^3.1.0",
+    "unzipper": "^0.10.11",
     "xterm-for-react": "^1.0.4"
   },
   "devDependencies": {
