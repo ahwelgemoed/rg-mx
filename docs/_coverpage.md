@@ -14,6 +14,7 @@
 - List all GH Users Gists
 
 [GitHub](https://github.com/ahwelgemoed/rg-mx)
+[Download](https://github.com/ahwelgemoed/rg-mx/releases)
 [Get Started](#rg-mx-hook)
 
 <!-- background color -->
