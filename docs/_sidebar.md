@@ -2,6 +2,6 @@
 
 - [Home](/#rg-mx-hook)
 - [Guide](/guide/guide.md)
-- [macOS Guide](/guide/guide.md)
-- [Windows Guide](/guide/guide.md)
+- [Windows Guide](/guide/windowsGuide.md)
+- [macOS Guide](/guide/macGuide.md)
 - [Video Guide](/guide/guide.md)
