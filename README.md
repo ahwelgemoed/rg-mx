@@ -72,7 +72,7 @@ Install the mac app and open it up. You might run into permissions issues as the
 <h4>4️⃣ Setup Windows App</h4>
  <img  align="center" alt="headerIMG" width='400' src="./github-images/windows-app-setup.png" target="_blank" />
 
-- Click _Choose Mendix Folder Path_ and navigate to any app in your Mendix Projects folder and click on any `.mrp` file. The app should then work out were all your mendix apps are.
+- Click _Choose Mendix Folder Path_ and navigate to any app in your Mendix Projects folder and click on any `.mpr` file. The app should then work out were all your mendix apps are.
 
  <img  align="center" alt="headerIMG" width='400' src="./github-images/windows-ip.png" target="_blank" />
 
@@ -83,7 +83,7 @@ Install the mac app and open it up. You might run into permissions issues as the
 
 - Copy the IP from the windows app and Paste it in the "Set Windows IP"
 
-- Click _Choose Mendix Folder Path_ and navigate to any app in your Mendix Projects folder and click on any `.mrp` file. The app should then work out were all your mendix apps are.
+- Click _Choose Mendix Folder Path_ and navigate to any app in your Mendix Projects folder and click on any `.mpr` file. The app should then work out were all your mendix apps are.
 
 - Click _Choose Widgets Folder Path_ and navigate to the folder on your mac where all your Mendix Widgets are and select a `READ ME.md` from any of the projects
 
