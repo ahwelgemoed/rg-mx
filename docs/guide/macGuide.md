@@ -14,15 +14,15 @@ As the app is not signed you will have to manually allow it to run.
 
 4. On your First open you should see something like this:
 
-   <img src="../_media/install_1.png" alt="drawing" width="400"/>
+   <img src="https://raw.githubusercontent.com/ahwelgemoed/rg-mx/main/docs/_media/install_1.png" alt="drawing" width="400"/>
 
 5. Go to System Preferrers and select Security and Privacy
 
-   <img src="../_media/install_2.png" alt="drawing" width="400"/>
+   <img src="https://raw.githubusercontent.com/ahwelgemoed/rg-mx/main/docs/_media/install_2.png" alt="drawing" width="400"/>
 
 6. Under the general Tab click the lock, enter your password and allow the App to run.
 
-   <img src="../_media/install_3.png" alt="drawing" width="400"/>
+   <img src="https://raw.githubusercontent.com/ahwelgemoed/rg-mx/main/docs/_media/install_3.png" alt="drawing" width="400"/>
 
 7. After that the app should open fine.
 

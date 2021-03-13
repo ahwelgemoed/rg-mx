@@ -4,4 +4,4 @@
 - [Guide](/guide/guide.md)
 - [Windows Guide](/guide/windowsGuide.md)
 - [macOS Guide](/guide/macGuide.md)
-- [Video Guide](/guide/guide.md)
+- [Video Guide](/guide/videoGuide.md)
