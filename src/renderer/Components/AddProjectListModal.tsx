@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   Stack,
   Button,
@@ -18,11 +17,12 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { SettingsIcon } from "@chakra-ui/icons";
-import { RootStoreContext } from "../stores/RootStore";
 import { observer } from "mobx-react-lite";
+import { RootStoreContext } from "../stores/RootStore";
 import { FolderSortEnum } from "../types/projectTypes";
-const platform = require("os").platform();
-const slash = platform === "darwin" ? "/" : "\\";
+
+import { slash } from "../utils";
+
 export const AddProjectListModal: React.FC = observer(({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [folderSort, setFolderSort] = React.useState<FolderSortEnum>(
@@ -32,9 +32,10 @@ export const AddProjectListModal: React.FC = observer(({}) => {
   const [mendixAppsPath, setMendixAppsPath] = React.useState<
     string | undefined
   >();
+
   React.useEffect(() => {
-    if (projectStore.projectsStore.mendixProjectsPathMac) {
-      setMendixAppsPath(projectStore.projectsStore.mendixProjectsPathMac);
+    if (projectStore.projectsStore.mendixProjectsPathOnWindows) {
+      setMendixAppsPath(projectStore.projectsStore.mendixProjectsPathOnWindows);
       if (projectStore.projectsStore.sortOption) {
         setFolderSort(projectStore.projectsStore.sortOption);
       } else {
@@ -44,25 +45,23 @@ export const AddProjectListModal: React.FC = observer(({}) => {
       onOpen();
     }
   }, []);
-  const locateGulpFile = (event: any) => {
-    if (event.target.files[0]) {
-      const pathToGulp = event.target.files[0].path;
-    }
-  };
-  const locateMendixAppsPath = (event: any) => {
-    if (event.target.files[0]) {
-      const pathToThisMendixProject = event.target.files[0].path;
+
+  const locateMendixAppsPath = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    if (e.target.files && e.target.files.length && e.target.files[0]) {
+      const pathToThisMendixProject = e.target.files[0].path;
       const split = pathToThisMendixProject.split(slash);
       split.splice(split.length - 2, 2);
       const joinMendixPath = split.join(slash);
       setMendixAppsPath(joinMendixPath);
     }
   };
-  const setAndSave = (e: FolderSortEnum) => {
+  const setAndSave = (e: FolderSortEnum): void => {
     setFolderSort(e);
     projectStore.projectsStore.setSortPath(e);
   };
-  const acceptAndAddProjects = () => {
+  const acceptAndAddProjects = (): void => {
     if (mendixAppsPath) {
       // Set Project Path To Mem
       projectStore.projectsStore.setProjectPath(mendixAppsPath);
@@ -97,14 +96,9 @@ export const AddProjectListModal: React.FC = observer(({}) => {
                 folder:
               </Heading>
 
-              <Button onChange={locateMendixAppsPath}>
+              <Button onChange={locateMendixAppsPath as any}>
                 <label className="custom-file-upload">
-                  <input
-                    id="path-picker"
-                    type="file"
-                    // @ts-ignore
-                    //   webkitdirectory="true"
-                  />
+                  <input id="path-picker" type="file" />
                   Choose Mendix Folder Path
                 </label>
               </Button>
@@ -118,7 +112,6 @@ export const AddProjectListModal: React.FC = observer(({}) => {
                 mb={4}
                 size="sm"
                 colorScheme="teal"
-                // @ts-ignore
                 onChange={setAndSave}
                 value={folderSort}
               >

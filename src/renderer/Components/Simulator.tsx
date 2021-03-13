@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 import {
   Heading,
   Button,
@@ -9,11 +9,11 @@ import {
   List,
   Link,
   ListItem,
-  Divider,
-} from "@chakra-ui/react";
-import fs from "fs";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { dataPath } from "../utils";
+  Divider
+} from '@chakra-ui/react'
+import fs from 'fs'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { dataPath } from '../utils'
 import {
   witchSimulatorIsInstalled,
   startupSimulator,
@@ -21,56 +21,56 @@ import {
   installMendixApp,
   downloadMendixApps,
   checkIfBootHasCompleted,
-  openMendixApp,
-} from "../utils/androidSimulator";
-const { shell } = require("electron");
-import axios from "axios";
+  openMendixApp
+} from '../utils/androidSimulator'
+import axios from 'axios'
+const { shell } = require('electron')
 
 const Simulator = () => {
-  const [listOfSims, setListOfSims] = useState<string[] | null>(null);
+  const [listOfSims, setListOfSims] = useState<string[] | null>(null)
   useEffect(() => {
     (async function anyNameFunction() {
-      await listOfandroidSim();
-    })();
-  }, []);
+      await listOfandroidSim()
+    })()
+  }, [])
 
   const listOfandroidSim = async () => {
-    const witchSim = await witchSimulatorIsInstalled();
-    const rationalList = witchSim.split("\n").filter(Boolean);
-    setListOfSims(rationalList);
-  };
+    const witchSim = await witchSimulatorIsInstalled()
+    const rationalList = witchSim.split('\n').filter(Boolean)
+    setListOfSims(rationalList)
+  }
 
   const startSelectedDevice = async (deviceToBoot: string, version: number) => {
-    const status = await startupSimulator(deviceToBoot);
-    let deviceBooted = false;
+    const status = await startupSimulator(deviceToBoot)
+    let deviceBooted = false
     do {
-      const result = await checkIfBootHasCompleted();
+      const result = await checkIfBootHasCompleted()
       if (result) {
         if (result.status === 0) {
-          deviceBooted = true;
+          deviceBooted = true
         }
       }
-    } while (!deviceBooted);
+    } while (!deviceBooted)
     if (deviceBooted) {
-      const installedAppName = await listAllAppsOnDevice(version);
+      const installedAppName = await listAllAppsOnDevice(version)
       if (installedAppName) {
         // MX INSTALLED
-        installedAppName && (await openMendixApp(installedAppName));
+        installedAppName && (await openMendixApp(installedAppName))
       }
       if (!installedAppName) {
-        await downloadMendixApps(version);
+        await downloadMendixApps(version)
         // MX MUST BE INSTALLED
         await setTimeout(async () => {
-          const installedSuccess = await installMendixApp(version);
-          if (installedSuccess && installedSuccess.includes("Success")) {
-            const getNameOfInstalledApp = await listAllAppsOnDevice(version);
+          const installedSuccess = await installMendixApp(version)
+          if (installedSuccess && installedSuccess.includes('Success')) {
+            const getNameOfInstalledApp = await listAllAppsOnDevice(version)
             getNameOfInstalledApp &&
-              (await openMendixApp(getNameOfInstalledApp));
+              (await openMendixApp(getNameOfInstalledApp))
           }
-        }, 5000);
+        }, 5000)
       }
     }
-  };
+  }
 
   return (
     <div>
@@ -86,7 +86,7 @@ const Simulator = () => {
             isExternal
             onClick={() =>
               shell.openExternal(
-                "https://reactnative.dev/docs/environment-setup#installing-dependencies"
+                'https://reactnative.dev/docs/environment-setup#installing-dependencies'
               )
             }
           >
@@ -105,7 +105,7 @@ const Simulator = () => {
               <div key={i * 12}>
                 <Stack direction="row" spacing={6} justify="space-between">
                   <Box mr="2">
-                    <ListItem>{item.replace(/_/g, " ")}</ListItem>
+                    <ListItem>{item.replace(/_/g, ' ')}</ListItem>
                   </Box>
                   <Box>
                     <ButtonGroup size="sm" isAttached>
@@ -131,12 +131,12 @@ const Simulator = () => {
                 <Spacer />
                 <Divider />
               </div>
-            );
+            )
           })}
         </List>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Simulator;
+export default Simulator

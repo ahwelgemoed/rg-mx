@@ -2,12 +2,10 @@ import spawnAsync from "@expo/spawn-async";
 import axios from "axios";
 
 import { exec } from "child_process";
-import path from "path";
 import { dataPath } from "../utils";
 import { createStandaloneToast } from "@chakra-ui/react";
 import icon from "../assets/Icon-128.png";
 import fs from "fs";
-import unzipper from "unzipper";
 import AdmZip from "adm-zip";
 
 const electron = require("electron");
@@ -46,19 +44,7 @@ export const startupSimulator = async (selectedDevice: string) => {
     position: "top",
     isClosable: true,
   });
-  exec(`emulator -avd ${selectedDevice}`, (err, stdout, stderr) => {
-    // if (err) {
-    //   console.log("err", err);
-    //   toast({
-    //     status: "error",
-    //     title: "Error",
-    //     description: `Android Sim Not Started`,
-    //     duration: 7000,
-    //     position: "top",
-    //     isClosable: true,
-    //   });
-    // }
-  });
+  exec(`emulator -avd ${selectedDevice}`, (err, stdout, stderr) => {});
 };
 
 export const installMendixApp = async (version: number) => {
@@ -176,7 +162,7 @@ export const checkIfBootHasCompleted = async () => {
 };
 
 export async function downloadMendixApps(version: number) {
-  let done = false;
+  const done = false;
   toast({
     status: "warning",
     title: "Downloading...",

@@ -1,28 +1,22 @@
-import React from 'react'
-
-import './App.css'
-import { hot } from 'react-hot-loader/root'
-import { remote } from 'electron'
-import { HashRouter as Router } from 'react-router-dom'
-import Layout from './Layout'
-import {
-  ChakraProvider,
-  ColorModeScript,
-  useColorMode,
-  Button
-} from '@chakra-ui/react'
-import theme from './theme'
+import React from "react";
+import "./App.css";
+import { hot } from "react-hot-loader/root";
+// import { remote } from 'electron'
+import { HashRouter as Router } from "react-router-dom";
+import Layout from "./Layout";
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import theme from "./theme";
 
 const App: React.FC = () => {
-  const electron = process.versions.electron
-  const node = process.versions.node
-  const platform = require('os').platform()
-  const version = require('../../package.json').version
+  // const electron = process.versions.electron
+  // const node = process.versions.node
+  // const platform = require('os').platform()
+  // const version = require('../../package.json').version
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    remote.shell.openExternal(e.currentTarget.href)
-  }
+  // const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  //   e.preventDefault()
+  //   remote.shell.openExternal(e.currentTarget.href)
+  // }
 
   return (
     <ChakraProvider theme={theme}>
@@ -31,7 +25,7 @@ const App: React.FC = () => {
         <Layout />
       </Router>
     </ChakraProvider>
-  )
-}
+  );
+};
 
-export default hot(App)
+export default hot(App);

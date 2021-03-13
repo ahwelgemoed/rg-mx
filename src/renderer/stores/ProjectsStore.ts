@@ -10,6 +10,7 @@ import {
   ProjectType,
   FolderSortEnum,
 } from "../types/projectTypes";
+
 const platform = require("os").platform();
 const { exec } = require("child_process");
 const spawn = require("cross-spawn");
@@ -29,7 +30,7 @@ export class ProjectsStore {
     makeObservable(this);
     this.store = store;
     this.rootStore = rootStore;
-    this.mendixProjectsPathMac = this.store.get(PROJECTS_PATH_MAC);
+    this.mendixProjectsPathOnWindows = this.store.get(PROJECTS_PATH_MAC);
     this.mendixProjectsPathWin = this.store.get(PROJECTS_PATH_Win);
     this.gulpPath = this.store.get(GULP_SORTED);
     this.projectsSorted = this.store.get(PROJECTS_SORTED);
@@ -40,7 +41,7 @@ export class ProjectsStore {
     return name.substr(name.length - 4) == ".mpr";
   };
 
-  @persist @observable mendixProjectsPathMac = "";
+  @persist @observable mendixProjectsPathOnWindows = "";
   @persist @observable mendixProjectsPathWin = "";
   @persist @observable gulpPath = "";
   @observable projectLoading = false;
@@ -65,8 +66,8 @@ export class ProjectsStore {
   }
 
   @action setProjectPath(stringPath: string) {
-    this.mendixProjectsPathMac = stringPath;
-    this.store.set("projectsStore", this.mendixProjectsPathMac);
+    this.mendixProjectsPathOnWindows = stringPath;
+    this.store.set("projectsStore", this.mendixProjectsPathOnWindows);
     toast({
       title: "Projects Folder Added",
       status: "success",
@@ -98,10 +99,9 @@ export class ProjectsStore {
     this.setLoading(true);
     setTimeout(() => {
       const foundNames: FolderNamesType[] = [];
-      console.log("folderSort");
-      const rawFiles = fs.readdirSync(this.mendixProjectsPathMac);
+      const rawFiles = fs.readdirSync(this.mendixProjectsPathOnWindows);
       rawFiles.forEach((file) => {
-        const PROJECT_PATH = `${this.mendixProjectsPathMac}/${file}`;
+        const PROJECT_PATH = `${this.mendixProjectsPathOnWindows}/${file}`;
         // If Directory
         if (fs.lstatSync(PROJECT_PATH).isDirectory()) {
           const branshFiels = fs.readdirSync(PROJECT_PATH);
@@ -146,7 +146,7 @@ export class ProjectsStore {
     this.setLoading(true);
     setTimeout(() => {
       let sortableUnq: string[] = [""];
-      if (!this.mendixProjectsPathMac) {
+      if (!this.mendixProjectsPathOnWindows) {
         this.setLoading(false);
         toast({
           title: "No Projects Folder Specified",
@@ -156,9 +156,9 @@ export class ProjectsStore {
           isClosable: true,
         });
       }
-      const rawFiles = fs.readdirSync(this.mendixProjectsPathMac);
+      const rawFiles = fs.readdirSync(this.mendixProjectsPathOnWindows);
       rawFiles.forEach((file) => {
-        const PROJECT_PATH = `${this.mendixProjectsPathMac}/${file}`;
+        const PROJECT_PATH = `${this.mendixProjectsPathOnWindows}/${file}`;
         // If Directory
         if (fs.lstatSync(PROJECT_PATH).isDirectory()) {
           const branshFiels = fs.readdirSync(PROJECT_PATH);
@@ -178,7 +178,7 @@ export class ProjectsStore {
       const sortedList: any[] = filtered.reduce((a: any[], c: string) => {
         const foundNames: FolderNamesType[] = [];
         rawFiles.forEach((name) => {
-          const PROJECT_PATH = `${this.mendixProjectsPathMac}/${name}`;
+          const PROJECT_PATH = `${this.mendixProjectsPathOnWindows}/${name}`;
           if (!name.startsWith(".")) {
             // hidden Files
             if (fs.lstatSync(PROJECT_PATH).isDirectory()) {
@@ -189,8 +189,6 @@ export class ProjectsStore {
                   const nameLenght = name.length;
                   const subName = name.substring(0, nameLenght / 2);
                   1;
-                  console.log("c", c);
-                  console.log("name", name);
                   if (c && name.includes(c)) {
                     return foundNames.push({
                       name,
@@ -302,7 +300,7 @@ export class ProjectsStore {
   }
 
   @action async openInVsCode(projectName: string) {
-    const buildString = `${this.mendixProjectsPathMac}/${projectName}/theme/styles`;
+    const buildString = `${this.mendixProjectsPathOnWindows}/${projectName}/theme/styles`;
     if (this.isDarwin) {
       try {
         const { stdout } = await spawnAsync("code", [buildString]);
