@@ -38,14 +38,20 @@ export function getAppDataPath() {
 export function getWindowsIp() {
   if (process.platform == "win32") {
     const nets = networkInterfaces();
-    const { Ethernet } = nets;
-    if (!Ethernet) return "NO IP FOUND";
-    const foundIP = Ethernet.find((ips: any) => {
-      if (ips.family === "IPv4") {
-        return ips.address;
+    let address;
+    for (const key1 in nets) {
+      if (Object.prototype.hasOwnProperty.call(nets, key1)) {
+        const element1 = nets[key1];
+        for (const key2 in element1) {
+          if (Object.prototype.hasOwnProperty.call(element1, key2)) {
+            const element2 = element1[key2 as any];
+            if (element2.family === "IPv4") {
+              return (address = element2.address);
+            }
+          }
+        }
       }
-    });
-    return foundIP && foundIP.address ? foundIP.address : "NO IP FOUND";
+    }
   }
   return "NO IP FOUND";
 }
