@@ -26,8 +26,6 @@
 - Open Widgets in VS Code or Terminal
 - List all GH Users Gists
 
-### 📚 Full DOCS [HERE](https://ahwelgemoed.github.io/rg-mx/#/)
-
 <h3>The Idea behind RG-MX</h3>
 <hr/>
 As a Mendix Widget Developer, I work and Develop from a Mac, but as Mendix Studio currently is only available on Windows, I use Parallels as my Windows Client.
@@ -45,6 +43,22 @@ You point the Windows app to your Mendix folders and Copy the Windows Address.
 You then go to the mac app and point it to your Mendix Apps Folders. In the Mac app you also add the windows address you added and point it to your widgets folder (if you use it), you also add your github username to get all your gists (again only if you use it).
 
 This will then list out all projects you have. It then gives you the ability to open studio quickly, or Vscode ect.
+
+<br/>
+<h4>🛑 Before You Start</h4>
+
+For the App to work you will have some prior setup that need to be done.
+
+- VSCode must be installed and added to your PATH ([macOS](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line)/[Windows](https://code.visualstudio.com/docs/setup/windows#_installation))
+- Parallels must be Setup according to Mendix Docs ([Mendix Docs](https://docs.mendix.com/howto/mobile/using-mendix-studio-pro-on-a-mac))
+- All Mendix projects must be in one folder (Nesting is not yet supported [see here](https://github.com/ahwelgemoed/rg-mx/projects/1#card-54876549))
+- (Optional) Android Studio must be installed and Configured as Stated by React Native Team ([React Native Setup](https://reactnative.dev/docs/environment-setup#installing-dependencies))
+- (Optional) All Widgets on Mac must be one folder
+
+<br/>
+
+<h3>Technical Info</h3>
+<hr/>
 
 This is a Electron app, with a Socket IO Server. certain commands from the mac is passed to the socket server where the windows app listen as executes them.
 
