@@ -41,3 +41,10 @@ The idea with the app is to be able to close a project and get back to it with a
 <h3>Disclaimer</h3>
 <hr/>
 This App is Not affiliated with Mendix in anyway and does not carry their approval as 3rd part software.
+<br/>
+<br/>
+
+<h3>Attributions</h3>
+<hr/>
+
+<div>Icons made by <a href="https://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski">Zlatko Najdenovski</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>

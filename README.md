@@ -118,3 +118,8 @@ A- You don't
 
 - [[Issue #1](https://github.com/ahwelgemoed/rg-mx/issues/1)]
   Currently the app size is very big. as the `apks` for Android is shipped with it. Ideally It would be downloaded every time the user request it.
+
+<h3>Attributions</h3>
+<hr/>
+
+<div>Icons made by <a href="https://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski">Zlatko Najdenovski</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
